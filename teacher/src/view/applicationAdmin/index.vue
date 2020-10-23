@@ -139,6 +139,7 @@ export default {
   min-height: 94%;
   background: #fff;
   position: relative;
+  
 
   .header {
     padding: 0 20px 20px 0px;
