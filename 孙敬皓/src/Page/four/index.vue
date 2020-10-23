@@ -10,6 +10,10 @@
     <span>7</span>
     <span>8</span>
     <i>64</i><i>232</i>
+    <i>64</i><i>232</i>
+    <i>64</i><i>232</i>
+    <i>64</i><i>232</i>
+
   </div>
 </template>
 
