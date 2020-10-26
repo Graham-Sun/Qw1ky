@@ -103,22 +103,13 @@
 </script>
 
 <style lang="scss">
-<<<<<<< HEAD
 #apply {
   padding: 20px;
   min-width: 95%;
   min-height: 94%;
   background: #fff;
   position: relative;
-  
-=======
-  #apply {
-    padding: 20px;
-    min-width: 95%;
-    min-height: 94%;
-    background: #fff;
-    position: relative;
->>>>>>> 4337a45199a370ea98ab42257ebd3a8ef05f03b2
+
 
     .header {
       padding: 0 20px 20px 0px;

@@ -88,9 +88,10 @@ export default {
       this.active = to.path;
       this.routerMenu = JSON.parse(localStorage.getItem("router"));
     },
+    // 监听路由是否变化
     routerMenu() {
       this.getSubMenu(this.routerMenu);
-      this.getActive(this.routerMenu[0], this.$route.path);
+      this.getActive(this.routerMenu[0]);
     },
   },
   methods: {
@@ -108,9 +109,9 @@ export default {
       });
     },
     // 手动解决重定向
-    getActive(router, redirect) {
+    getActive(router) {
       // 如果进来是 '/' 说明需要重定向，不是'/'则不走我们的重定向代码
-      if (redirect !== "/") {
+      if (this.$route.path !== "/") {
         this.active = this.$route.path;
         return;
       }

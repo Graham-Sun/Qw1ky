@@ -1,6 +1,7 @@
 <template>
   <div>
     menu2
+    {{$store.state.count}}
   </div>
 </template>
 
