@@ -1,5 +1,5 @@
 <template>
-  <div id="apply">
+  <div id="apply" v-loading="loading">
     <div class="header">
       手机号码：<el-input placeholder="请输入手机号" v-model="page.phone" clearable size="mini" class="input">
       </el-input>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import { getTeacherApply } from "@/api/httpApi";
+  import { getApplyManagement } from "@/api/httpApi";
   export default {
     name: "applicationAdmin",
     data() {
@@ -57,16 +57,18 @@
           name: "",
         },
         tableData: [],
-        total: 0
+        total: 0,
+        loading: true
       }
     },
     methods: {
       //请求页面数据
-      getTeacherApply() {
-        getTeacherApply(this.page).then(res => {
+      getApplyManagement() {
+        getApplyManagement(this.page).then(res => {
           let { data } = res
           this.tableData = data.data.list
           this.total = data.data.num
+          this.loading = false
         })
       },
       // 点击table按钮
@@ -92,17 +94,17 @@
           pageIndex: 1,
           pageSize: e
         }
-        this.getTeacherApply()
+        this.getApplyManagement()
       },
       //当点击页码  改变时
       handleCurrentChange(e) {
         this.page.pageIndex = e
-        this.getTeacherApply()
+        this.getApplyManagement()
       },
       //点击查询按钮
       search() {
         this.page.pageIndex = 1
-        this.getTeacherApply();
+        this.getApplyManagement();
       },
       //点击重置按钮
       clear() {
@@ -111,11 +113,11 @@
           name: "",
           pageIndex: 1
         }
-        this.getTeacherApply();
+        this.getApplyManagement();
       }
     },
     mounted: function () {
-      this.getTeacherApply()
+      this.getApplyManagement()
     }
   }
 </script>

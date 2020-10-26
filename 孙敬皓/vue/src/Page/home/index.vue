@@ -2,9 +2,9 @@
   <el-container id="Home">
     <el-header>
       <div class="info">
-        <img src="@/assets/img/login/mobilelogo.png" class="user" alt="">
+        <img src="@/assets/img/login/logo.png" class="user" alt="">
         <div @click="dialogVisible = true">
-          <el-image class="headerImg" :src="user.headImg" :lazy='true' ></el-image>
+          <el-image class="headerImg" :src="user.headImg" :lazy='true'></el-image>
           <span>{{user.name}}</span>
         </div>
       </div>
@@ -44,6 +44,7 @@
         openeds: [],
         router: JSON.parse(localStorage.getItem("router")),
         dialogVisible: false,
+        loading: "true"
       };
     },
     components: {
@@ -139,6 +140,10 @@
       display: flex;
       justify-content: space-between;
 
+      .user {
+        width: 200px;
+      }
+
       .info {
         width: 90%;
         display: flex;
@@ -150,12 +155,13 @@
           height: 50px;
           border-radius: 50%;
           position: relative;
-          top: 9px;
+          top: 6px;
         }
 
         span {
+          margin-left: 4px;
           position: relative;
-          top: -8px;
+          top: -12px;
           font-weight: 700;
           background-image: -webkit-linear-gradient(bottom,
               rgb(255, 60, 0),

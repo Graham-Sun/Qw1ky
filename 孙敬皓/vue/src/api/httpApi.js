@@ -13,14 +13,16 @@ const postPhone = (data) => post('/phoneLogin', data);
 const getSchool = (data) => get('/school', data)
 //获取个人在绑定学校里的权限
 const getSchoolRouter = (data) => post('/schoolRouter', data)
+//获取申请管理页
+const getApplyManagement = (data) => get('/ApplyManagement', data)
 //获取教师申请页
 const getTeacherApply = (data) => get('/teacherApply', data)
-
 
 export {
   postCode,
   postPhone,
   getSchool,
   getSchoolRouter,
+  getApplyManagement,
   getTeacherApply
 }
