@@ -1,20 +1,25 @@
 <template>
   <div>
     menu1
-    <el-button @click="add">{{ $store.state.count }}</el-button>
+    {{ price }}
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "Menu1",
   data() {
     return {};
   },
+  computed: {
+    ...mapState("menu1", {
+      price: (state) => state.price,
+    }),
+  },
   methods: {
-    add() {
-      this.$store.commit("increment");
-    },
+    add() {},
   },
   mounted() {},
 };
