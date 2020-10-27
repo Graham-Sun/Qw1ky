@@ -5,42 +5,29 @@
         <i class="el-icon-switch-button"></i>
         退出
       </div>
-      <div class="name" @click="dialogVisible = true">
-        <el-image class="headerImg" :src="user.url"></el-image>
-        <span> {{ user.nickName }}</span>
-      </div>
     </el-header>
     <el-container>
       <el-aside width="240px">
-        <el-menu
-          :router="true"
-          :default-active="active"
-          :default-openeds="openeds"
-          class="el-menu-vertical-demo"
-        >
+        <el-menu :router="true" :default-active="active" :default-openeds="openeds" class="el-menu-vertical-demo">
           <SubMenu :router="routerMenu" />
-
           <!-- <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-s-marketing"></i>
               <span>成绩分析</span>
             </template>
-            <el-menu-item index="/menu1">单次分析</el-menu-item>
-            <el-submenu index="1-1">
-              <template slot="title">
-                <i class="el-icon-s-marketing"></i>
-                <span>老师分析</span>
-              </template>
-              <el-menu-item index="/xxxx">分析老师</el-menu-item>
-            </el-submenu>
+            <el-menu-item-group>
+              <el-menu-item index="/menu1">单次分析</el-menu-item>
+            </el-menu-item-group>
           </el-submenu>
           <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-s-home"></i>
               <span>学校管理</span>
             </template>
-            <el-menu-item index="/menu2">教师管理</el-menu-item>
-            <el-menu-item index="/applicationAdmin">申请管理</el-menu-item>
+            <el-menu-item-group>
+              <el-menu-item index="/menu2">教师管理</el-menu-item>
+              <el-menu-item index="/applicationAdmin">申请管理</el-menu-item>
+            </el-menu-item-group>
           </el-submenu> -->
         </el-menu>
       </el-aside>
@@ -63,7 +50,9 @@
 
 <script>
 import SubMenu from "@/components/sub_menu.vue";
-import Dialog from "@/components/dialog.vue";
+import Dialog from "../../components/dialog.vue"
+
+
 export default {
   name: "Home",
   data() {
@@ -73,13 +62,14 @@ export default {
       // 默认展开有children的节点
       openeds: [],
       // 有submenu，那必定会有children。
-      routerMenu: JSON.parse(localStorage.getItem("router")),
+      routerMenu: JSON.parse(localStorage.getItem("router")) ||[],
       dialogVisible: false,
     };
   },
   components: {
     SubMenu: SubMenu,
     Dialog: Dialog,
+
   },
   // 切换同级children，监听$route的变化来修改菜单
   watch: {
@@ -88,10 +78,9 @@ export default {
       this.active = to.path;
       this.routerMenu = JSON.parse(localStorage.getItem("router"));
     },
-    // 监听路由是否变化
     routerMenu() {
       this.getSubMenu(this.routerMenu);
-      this.getActive(this.routerMenu[0]);
+      this.getActive(this.routerMenu[0], this.$route.path);
     },
   },
   methods: {
@@ -109,9 +98,9 @@ export default {
       });
     },
     // 手动解决重定向
-    getActive(router) {
+    getActive(router, redirect) {
       // 如果进来是 '/' 说明需要重定向，不是'/'则不走我们的重定向代码
-      if (this.$route.path !== "/") {
+      if (redirect !== "/") {
         this.active = this.$route.path;
         return;
       }
@@ -134,13 +123,12 @@ export default {
   },
   mounted() {
     if (localStorage.getItem("user")) {
-      this.user = JSON.parse(localStorage.getItem("user"));
-      this.getSubMenu(this.routerMenu);
-      this.getActive(this.routerMenu[0], this.$route.path);
+      this.user = localStorage.getItem("user");
     } else {
       this.$router.push({ name: "Login" });
     }
-
+    this.getSubMenu(this.routerMenu);
+    this.getActive(this.routerMenu[0], this.$route.path);
     /*
     1、this.$router: router的实例，包含全部路由和参数
     2、this.$route: 当前页面路由参数，包含传过来的参数params、query
@@ -159,37 +147,12 @@ export default {
 #home {
   height: 100%;
   width: 100%;
-  background: #f5f4f4;
+  background: #fcfcfc;
   .el-header {
     background: linear-gradient(270deg, #17c7bb 0%, #0fbc77 100%) !important;
     line-height: 70px !important;
     height: 70px !important;
     padding: 0 31px;
-    .name {
-      float: right;
-      margin-right: 40px;
-      cursor: pointer;
-      .headerImg {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        position: relative;
-        top: 9px;
-      }
-      span {
-        position: relative;
-        top: -8px;
-        font-weight: 700;
-        background-image: -webkit-linear-gradient(
-          bottom,
-          rgb(255, 60, 0),
-          #fdf903,
-          #fff
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-    }
     .out {
       float: right;
       color: #fff;
@@ -202,9 +165,10 @@ export default {
     text-align: center;
     line-height: 43px !important;
     height: 43px !important;
-    font-size: 14px;
+    font-size: 16px;
   }
   .el-aside {
+    height: 806px;
     border-right: 1px solid #ccc;
     background: #fff;
     .el-menu-vertical-demo {
