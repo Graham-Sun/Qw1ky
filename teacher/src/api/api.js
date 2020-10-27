@@ -15,10 +15,14 @@ const postSchoolRouter = (data) => post("/schoolRouter", data);
 // 教师申请列表
 const getSchoolApply = (data) => get("/schoolApply", data);
 
+// 获取教师列表
+const getTeacherList = (data) => get("/teacherList", data);
+
 export {
   postCode,
   postPhoneLogin,
   getSchoolList,
   postSchoolRouter,
   getSchoolApply,
+  getTeacherList,
 };

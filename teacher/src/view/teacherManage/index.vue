@@ -1,5 +1,5 @@
 <template>
-  <div id="apply" v-loading="loading">
+  <div id="teacher" v-loading="loading">
     <div class="header">
       手机号码：<el-input
         placeholder="请输入手机号"
@@ -23,32 +23,55 @@
       <el-button class="btn" type="success" size="small" @click="clean">
         重置
       </el-button>
+      <div class="right_btn">
+        <el-button class="btn_share" icon="el-icon-share" size="small">
+          邀请教师
+        </el-button>
+        <el-button
+          class="btn_add"
+          type="success"
+          icon="el-icon-plus"
+          size="small"
+          @click="$refs.editTeacherInfo.visible = true"
+        >
+          新增教师
+        </el-button>
+      </div>
     </div>
-    <el-table :data="tableData" border style="width: 100%" size="small">
+    <el-table
+      :data="tableData"
+      border
+      style="width: 100%"
+      class="table"
+      size="small"
+    >
+      <el-table-column prop="phone" label="手机号码"> </el-table-column>
       <el-table-column prop="name" label="教师姓名"> </el-table-column>
+      <el-table-column prop="stage" label="学段" :formatter="formatterStage">
+      </el-table-column>
+      <el-table-column
+        prop="subject"
+        label="任教科目"
+        :formatter="formatterSubject"
+      >
+      </el-table-column>
       <el-table-column prop="age" label="年龄"> </el-table-column>
       <el-table-column prop="sex" label="性别" :formatter="formatter">
       </el-table-column>
-      <el-table-column prop="phone" label="手机号码"> </el-table-column>
-      <el-table-column prop="date" label="申请时间"> </el-table-column>
+      <el-table-column prop="date" label="更新时间"> </el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === 0" type="danger">禁用</el-tag>
+          <el-tag v-if="scope.row.status === 1" type="success">正常</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <div v-if="scope.row.status == 0">
-            <el-button
-              @click="handleClick(scope.row, 1)"
-              size="small"
-              type="success"
-              >通过</el-button
-            >
-            <el-button
-              type="danger"
-              size="small"
-              @click="handleClick(scope.row, 2)"
-              >拒绝</el-button
-            >
-          </div>
-          <el-tag v-if="scope.row.status === 1" type="success">已通过</el-tag>
-          <el-tag v-if="scope.row.status === 2" type="danger">已拒绝</el-tag>
+          <i
+            class="el-icon-edit-outline"
+            @click="$refs.editTeacherInfo.edit(scope.row)"
+          />
+          <i class="el-icon-delete" />
         </template>
       </el-table-column>
     </el-table>
@@ -64,11 +87,18 @@
       :total="total"
     >
     </el-pagination>
+    <EditTeacherDialog
+      ref="editTeacherInfo"
+      :stage="stage"
+      :subject="subject"
+      :sex="sex"
+    />
   </div>
 </template>
 
 <script>
-import { getSchoolApply } from "@/api/api";
+import { getTeacherList } from "@/api/api";
+import { mapState } from "vuex";
 export default {
   name: "applicationAdmin",
   data() {
@@ -84,10 +114,17 @@ export default {
       loading: false,
     };
   },
+  computed: {
+    ...mapState("teacherInfo", {
+      stage: "stage",
+      subject: "subject",
+      sex: "sex",
+    }),
+  },
   methods: {
-    getSchoolApply() {
+    getTeacherList() {
       this.loading = true;
-      getSchoolApply(this.page).then((res) => {
+      getTeacherList(this.page).then((res) => {
         let { data } = res;
         this.tableData = data.list;
         this.total = data.num;
@@ -100,40 +137,52 @@ export default {
     },
     // 获取当前行数据，并格式化(尽量减少对原数据的修改)
     formatter(row) {
-      return row.sex ? "男" : "女";
+      return this.sex[row.sex];
+    },
+    formatterStage(row) {
+      return this.stage[row.stage];
+    },
+    formatterSubject(row) {
+      return this.subject[row.subject];
     },
     // 修改当前条目数量
     changeSize(e) {
       this.page.pageSize = e;
       this.page.pageIndex = 1;
-      this.getSchoolApply();
+      this.getTeacherList();
     },
     // 修改当前页数
     changePage(e) {
       this.page.pageIndex = e;
-      this.getSchoolApply();
+      this.getTeacherList();
     },
     // 查找当前列表
     search() {
       this.page.pageIndex = 1;
-      this.getSchoolApply();
+      this.getTeacherList();
     },
     // 重置搜索条件
     clean() {
       this.page.phone = "";
       this.page.name = "";
       this.page.pageIndex = 1;
-      this.getSchoolApply();
+      this.getTeacherList();
+    },
+    changeTeacherInfo(e) {
+      let index = this.tableData.findIndex((item) => item.id === e.id);
+      this.tableData.splice(index, 1, e);
     },
   },
   mounted() {
-    this.getSchoolApply();
+    this.$bus.$off("teacherInfo");
+    this.$bus.$on("teacherInfo", this.changeTeacherInfo);
+    this.getTeacherList();
   },
 };
 </script>
 
 <style lang="scss">
-#apply {
+#teacher {
   padding: 20px;
   min-width: 95%;
   min-height: 94%;
@@ -154,6 +203,18 @@ export default {
       height: 28px;
       line-height: 0px;
     }
+
+    .right_btn {
+      float: right;
+      .btn_add {
+        background: #1dbd84;
+      }
+      .btn_share,
+      .btn_add {
+        height: 28px;
+        line-height: 0px;
+      }
+    }
   }
 
   .page {
@@ -163,6 +224,18 @@ export default {
 
     .active {
       background-color: #1dbd84 !important;
+    }
+  }
+  .table {
+    .el-icon-edit-outline,
+    .el-icon-delete {
+      font-size: 16px;
+      color: #1dbd84;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+    .el-icon-delete {
+      color: #d54141;
     }
   }
 }

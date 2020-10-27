@@ -18,7 +18,7 @@
           :default-openeds="openeds"
           class="el-menu-vertical-demo"
         >
-          <SubMenu :router="routerMenu" />
+          <SubMenu :router="routerMenu" ref="one" />
 
           <!-- <el-submenu index="1">
             <template slot="title">
@@ -47,6 +47,9 @@
       <el-main>
         <!-- home：显示路由页面（当前页面下，也就是home的子项） -->
         <router-view></router-view>
+        <!-- <keep-alive>
+
+        </keep-alive> -->
       </el-main>
     </el-container>
     <el-footer>
@@ -96,8 +99,9 @@ export default {
   },
   methods: {
     logingOut() {
-      localStorage.clear();
-      this.$router.push({ name: "Login" });
+      console.log(this.$children);
+      // localStorage.clear();
+      // this.$router.push({ name: "Login" });
     },
     // 打开submenu
     getSubMenu(router) {

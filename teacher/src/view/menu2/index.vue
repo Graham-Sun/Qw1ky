@@ -8,19 +8,19 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
 export default {
   name: "Menu2",
   data() {
-    return {};
+    return {
+      count: 0,
+    };
   },
-  computed: {
-    ...mapState("menu2", {
-      count: (state) => state.count,
-    }),
-  },
+  computed: {},
   methods: {
-    ...mapActions("menu2", ["addCount", "reduceCount"]),
+    addCount() {
+
+    },
+    reduceCount() {},
   },
   mounted() {},
 };

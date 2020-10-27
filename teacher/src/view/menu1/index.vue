@@ -6,22 +6,22 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
   name: "Menu1",
   data() {
-    return {};
-  },
-  computed: {
-    ...mapState("menu1", {
-      price: (state) => state.price,
-    }),
+    return {
+      price: 0,
+    };
   },
   methods: {
-    add() {},
+    testA() {
+      this.price += 1;
+      console.log("由A组件调用");
+    },
   },
-  mounted() {},
+  mounted() {
+
+  },
 };
 </script>
 
