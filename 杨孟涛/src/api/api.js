@@ -25,3 +25,7 @@ export { getSchoolApply };
 //获取input
 const getinput = (data) => get('/input', data)
 export { getinput };
+
+//获取教师申请
+const getTClist = (data) => get('/TClist', data)
+export { getTClist };
