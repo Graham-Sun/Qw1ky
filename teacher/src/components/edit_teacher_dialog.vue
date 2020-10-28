@@ -35,6 +35,12 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-radio-group v-model="teacherInfo.status">
+          <el-radio :label="1">正常</el-radio>
+          <el-radio class="error" :label="0">禁用</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="学段" prop="stage">
         <el-select v-model="teacherInfo.stage" placeholder="请选择学段">
           <el-option
@@ -102,6 +108,7 @@ export default {
             trigger: "change",
           },
         ],
+        status: [{ required: true, message: "请选择状态", trigger: "change" }],
       },
     };
   },
@@ -124,9 +131,9 @@ export default {
           "teacherInfo",
           JSON.parse(JSON.stringify(this.teacherInfo))
         );
-        // this.teacherInfo = {};
+        this.$refs["form"].resetFields();
         this.visible = false;
-        // this.$refs["form"].resetFields();
+        this.teacherInfo = {};
       }, 150);
     },
     close() {
@@ -139,15 +146,25 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 ._edit_teacher_dialog {
   .el-select {
     width: 100%;
   }
   .footer {
-    text-align: center !important;
+    text-align: center;
     position: relative;
     left: -40px;
+  }
+  .error.is-checked {
+    .el-radio__label {
+      color: #F56C6C;
+    }
+
+    .el-radio__input.is-checked .el-radio__inner {
+      background: #F56C6C;
+      border-color: #F56C6C;
+    }
   }
 }
 </style>
