@@ -20,13 +20,19 @@ const routes = [{
     name: "Home",
     component: () => import("@/Page/home/index.vue"),
     // // 重定向
-    // redirect: "/ASingleAnalysis",
+    redirect: "/ASingleAnalysis",
     children: [{
         // 当 /ASingleAnalysis 匹配成功，
         // ASingleAnalysis 会被渲染在 Home 的 <router-view> 中
         path: "ASingleAnalysis",
         name: "ASingleAnalysis",
-        component: () => import("@/Page/ASingleAnalysis/index.vue"),
+        component: () => import("@/Page/ASingleAnalysis/tab/analysis.vue"),
+        // redirect: {name: 'singleExcelID'},
+        // children: [{
+        //   path: "singleExcelID",
+        //   name: "singleExcelID",
+        //   component: () => import("@/Page/ASingleAnalysis/tab/analysis.vue"),
+        // }]
       },
       {
         // 当 /teacherManagement 匹配成功，

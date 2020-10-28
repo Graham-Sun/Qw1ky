@@ -29,7 +29,6 @@ router.beforeEach((to, from, next) => {
   loactionFn(loactionRouter);
   if (loactionActive.indexOf(to.path) >= 0) {
     next()
-    console.log(from);
   } else {
     router.go(-1)
   }

@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <Dialog :dialogVisible="dialogVisible" :userId="userId" v-on:close="dialogVisible = false"/>
+    <Dialog :dialogVisible="dialogVisible" :userId="userId" v-on:close="dialogVisible = false" />
   </div>
 </template>
 

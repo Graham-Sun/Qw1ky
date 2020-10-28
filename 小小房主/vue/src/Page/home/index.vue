@@ -33,7 +33,7 @@
 </template>
 <script>
 
-  import SubMenu from '@/components/submenu.vue'
+  import SubMenu from '@/components/SubMenu.vue'
   import Dialog from '@/components/Dialog.vue'
   export default {
     name: "Home",
@@ -83,7 +83,7 @@
       //手动重定向
       getActive(redirect, router) {
         if (redirect !== "/") {
-          this.active = this.$route.path; 2
+          this.active = this.$route.path;
           return;
         }
         if (router.children) {

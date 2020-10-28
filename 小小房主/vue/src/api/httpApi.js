@@ -17,12 +17,14 @@ const getSchoolRouter = (data) => post('/schoolRouter', data)
 const getApplyManagement = (data) => get('/ApplyManagement', data)
 //获取教师申请页
 const getTeacherApply = (data) => get('/teacherApply', data)
-
+//获取单次分析页
+const getASingleAnalysis = (data) => get('/ASingleAnalysis', data)
 export {
   postCode,
   postPhone,
   getSchool,
   getSchoolRouter,
   getApplyManagement,
-  getTeacherApply
+  getTeacherApply,
+  getASingleAnalysis
 }

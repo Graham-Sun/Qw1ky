@@ -14,63 +14,62 @@
         </el-button>
       </div>
       <div class="right">
-        <el-button class="abtn" type="success" size="small" @click="inviteTeacher">
-          <i class="el-icon-time"></i>
+        <el-button @click="aaa" class="abtn" type="success" icon="el-icon-time" size="small">
           邀请教师
         </el-button>
-        <el-button class="btn" type="success" size="small" @click="newTeacher">
-          <i class="el-icon-plus"></i>
+        <el-button class="btn" type="success" icon="el-icon-plus" size="small"
+          @click="$refs.editTeacherInfo.visible = true">
           新增教师
         </el-button>
       </div>
     </div>
     <div class="table">
       <el-table :data="tableData" border style="width: 100%;" :row-class-name="tableRowClassName" size="mini">
-        <el-table-column prop="id" label="编号">
+        <el-table-column prop="id" label="编号"">
         </el-table-column>
-        <el-table-column prop=" phone" label="手机号码">
+        <el-table-column prop= "phone" label="手机号码">
         </el-table-column>
         <el-table-column prop="name" label="教师姓名">
         </el-table-column>
-        <el-table-column prop="phase" label="学段">
+        <el-table-column prop="stage" label="学段" :formatter="formatterStage">
         </el-table-column>
-        <el-table-column prop="subject" label="任教年级/班级">
+        <el-table-column prop="subject" label="任教科目" :formatter="formatterSubject">
         </el-table-column>
-        <el-table-column prop="class" label="任教科目">
+        <el-table-column prop="sex" label="性别" :formatter="formatterSex">
         </el-table-column>
         <el-table-column prop="date" label="更新时间">
         </el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <div>
-              <el-button v-if="scope.row.status === 0" @click="handleClick(scope.row, 1)" size="small" type="success">正常
-              </el-button>
-              <el-button v-if="scope.row.status === 1" @click="handleClick(scope.row, 0)" size="small" type="danger">禁用
-              </el-button>
-            </div>
+            <el-tag v-show="scope.row.status === 0" type="danger">禁用</el-tag>
+            <el-tag v-show="scope.row.status === 1" type="success">正常</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作">
-          <i class="el-icon-edit-outline icon"></i>
-          <i class="el-icon-delete-solid icon"></i>
+          <template slot-scope="scope">
+            <i class="el-icon-edit-outline" @click="$refs.editTeacherInfo.edit(scope.row)"></i>
+            <i class="el-icon-delete-solid"></i>
+          </template>
         </el-table-column>
-
       </el-table>
     </div>
     <el-pagination class="page" background @size-change="handleSizeChange" @current-change="handleCurrentChange"
       :current-page="page.pageIndex" :page-sizes="[5, 10]" layout="total, sizes, prev, pager, next, jumper"
       :total="total">
     </el-pagination>
+    <EditTeacherDialog ref="editTeacherInfo" :stage="stage" :subject="subject" :sex="sex" />
   </div>
 
 </template>
 
 <script>
   import { getTeacherApply } from "@/api/httpApi";
+  import { mapState } from 'vuex';
   export default {
     name: "applicationAdmin",
     data() {
       return {
+        visible: false,
         page: {
           pageIndex: 1,
           pageSize: 10,
@@ -82,7 +81,18 @@
         loading: true
       }
     },
+    computed: {
+      ...mapState('teacher', {
+        stage: "stage",
+        subject: "subject",
+        sex: "sex"
+      })
+    },
     methods: {
+      aaa() {
+        // console.log(this.$refs);
+        // console.log(this.stage,this.subject,this.sex);
+      },
       //请求页面数据
       getTeacherApply() {
         getTeacherApply(this.page).then(res => {
@@ -92,10 +102,6 @@
           this.loading = false
         })
       },
-      // 点击table按钮
-      handleClick(row, status) {
-        row.status = status;
-      },
       //表格颜色
       tableRowClassName({ rowIndex }) {
         if (rowIndex % 2 === 0) {
@@ -104,6 +110,16 @@
           return 'even-row';
         }
         return '';
+      },
+      //获取当前行数据，并格式化(尽量减少对原数据的修改)
+      formatterSex(row) {
+        return this.sex[row.sex]
+      },
+      formatterStage(row) {
+        return this.stage[row.stage]
+      },
+      formatterSubject(row) {
+        return this.subject[row.subject]
       },
       //使页面展示数目改变时
       handleSizeChange(e) {
@@ -131,9 +147,16 @@
           pageIndex: 1
         }
         this.getTeacherApply();
+      },
+      //改变页面数据
+      changeTeacherInfo(e) {
+        let index = this.tableData.findIndex(item => item.id === e.id)
+        this.tableData.splice(index, 1, e);
       }
     },
     mounted: function () {
+      this.$bus.$off("teacherInfo");
+      this.$bus.$on("teacherInfo", this.changeTeacherInfo);
       this.getTeacherApply()
     }
   }
@@ -180,9 +203,16 @@
       background: #f0f9eb;
     }
 
-    .icon {
-      margin-left: 20px;
+    .el-icon-edit-outline,
+    .el-icon-delete-solid {
+      font-size: 16px;
       color: #1dbd84;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+
+    .el-icon-delete-solid {
+      color: #d54141;
     }
 
     .page {
