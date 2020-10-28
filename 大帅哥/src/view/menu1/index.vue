@@ -1,7 +1,7 @@
 <template>
   <div>
     menu1
-    {{ price }}
+    {{ count }}
   </div>
 </template>
 
@@ -10,17 +10,16 @@ export default {
   name: "Menu1",
   data() {
     return {
-      price: 0,
+      count: 0,
     };
   },
   methods: {
-    testA() {
-      this.price += 1;
-      console.log("由A组件调用");
+    testA(e) {
+      this.count += e
     },
   },
   mounted() {
-
+    this.$bus.$on('aaa', this.testA)
   },
 };
 </script>
