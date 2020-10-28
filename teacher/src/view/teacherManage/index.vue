@@ -61,8 +61,8 @@
       <el-table-column prop="date" label="更新时间"> </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 0" type="danger">禁用</el-tag>
-          <el-tag v-if="scope.row.status === 1" type="success">正常</el-tag>
+          <el-tag v-show="scope.row.status === 0" type="danger">禁用</el-tag>
+          <el-tag v-show="scope.row.status === 1" type="success">正常</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作">

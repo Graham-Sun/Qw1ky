@@ -46,10 +46,10 @@
       </el-aside>
       <el-main>
         <!-- home：显示路由页面（当前页面下，也就是home的子项） -->
-        <router-view></router-view>
-        <!-- <keep-alive>
 
-        </keep-alive> -->
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
       </el-main>
     </el-container>
     <el-footer>
@@ -71,12 +71,12 @@ export default {
   name: "Home",
   data() {
     return {
-      user: "",
+      user: JSON.parse(localStorage.getItem("user")) || {},
       active: "",
       // 默认展开有children的节点
       openeds: [],
       // 有submenu，那必定会有children。
-      routerMenu: JSON.parse(localStorage.getItem("router")),
+      routerMenu: JSON.parse(localStorage.getItem("router")) || [],
       dialogVisible: false,
     };
   },
@@ -99,9 +99,8 @@ export default {
   },
   methods: {
     logingOut() {
-      console.log(this.$children);
-      // localStorage.clear();
-      // this.$router.push({ name: "Login" });
+      localStorage.clear();
+      this.$router.push({ name: "Login" });
     },
     // 打开submenu
     getSubMenu(router) {
@@ -138,7 +137,6 @@ export default {
   },
   mounted() {
     if (localStorage.getItem("user")) {
-      this.user = JSON.parse(localStorage.getItem("user"));
       this.getSubMenu(this.routerMenu);
       this.getActive(this.routerMenu[0], this.$route.path);
     } else {

@@ -19,6 +19,7 @@ Vue.component("EditTeacherDialog", () =>
 );
 
 Vue.prototype.$bus = bus;
+
 new Vue({
   router,
   store,
