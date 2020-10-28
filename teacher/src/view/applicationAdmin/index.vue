@@ -33,7 +33,7 @@
       <el-table-column prop="date" label="申请时间"> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <div v-if="scope.row.status == 0">
+          <div v-show="scope.row.status == 0">
             <el-button
               @click="handleClick(scope.row, 1)"
               size="small"
@@ -47,8 +47,8 @@
               >拒绝</el-button
             >
           </div>
-          <el-tag v-if="scope.row.status === 1" type="success">已通过</el-tag>
-          <el-tag v-if="scope.row.status === 2" type="danger">已拒绝</el-tag>
+          <el-tag v-show="scope.row.status === 1" type="success">已通过</el-tag>
+          <el-tag v-show="scope.row.status === 2" type="danger">已拒绝</el-tag>
         </template>
       </el-table-column>
     </el-table>

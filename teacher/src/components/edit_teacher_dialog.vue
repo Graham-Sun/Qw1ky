@@ -82,15 +82,7 @@ export default {
       }
     };
     return {
-      teacherInfo: {
-        id: "",
-        name: "",
-        phone: "",
-        age: "",
-        sex: "",
-        stage: "",
-        subject: "",
-      },
+      teacherInfo: {},
       visible: false,
       rules: {
         name: [{ required: true, message: "请输入您的姓名" }],
@@ -127,22 +119,20 @@ export default {
       });
     },
     change() {
-      this.$bus.$emit(
-        "teacherInfo",
-        JSON.parse(JSON.stringify(this.teacherInfo))
-      );
-      this.teacherInfo = {
-        id: "",
-      };
-      this.visible = false;
-      this.$refs["form"].resetFields();
+      setTimeout(() => {
+        this.$bus.$emit(
+          "teacherInfo",
+          JSON.parse(JSON.stringify(this.teacherInfo))
+        );
+        // this.teacherInfo = {};
+        this.visible = false;
+        // this.$refs["form"].resetFields();
+      }, 150);
     },
     close() {
       this.$refs["form"].resetFields();
       this.visible = false;
-      this.teacherInfo = {
-        id: "",
-      };
+      this.teacherInfo = {};
     },
   },
   mounted() {},
