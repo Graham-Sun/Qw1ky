@@ -21,10 +21,24 @@ const routes = [
       {
         // 当 /menu1 匹配成功，
         // menu1 会被渲染在 Home 的 <router-view> 中
-        id: "/menu1",
-        path: "menu1",
-        name: "menu1",
-        component: () => import("@/view/menu1/index.vue"),
+        id: "/analysis",
+        path: "analysis",
+        name: "analysis",
+        component: () => import("@/view/analysis/index.vue"),
+        children: [
+          {
+            id: "/analysisComplete",
+            path: "analysisComplete",
+            name: "analysisComplete",
+            component: () => import("@/view/analysisComplete/index.vue"),
+          },
+          {
+            id: "/newBuilt",
+            path: "newBuilt",
+            name: "newBuilt",
+            component: () => import("@/view/newBuilt/index.vue"),
+          },
+        ],
       },
       {
         // 当 /menu2 匹配成功，

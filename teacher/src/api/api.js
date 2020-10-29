@@ -18,6 +18,9 @@ const getSchoolApply = (data) => get("/schoolApply", data);
 // 获取教师列表
 const getTeacherList = (data) => get("/teacherList", data);
 
+// 获取单词分析
+const getAnalysis = (data) => get("/analysis", data);
+
 export {
   postCode,
   postPhoneLogin,
@@ -25,4 +28,5 @@ export {
   postSchoolRouter,
   getSchoolApply,
   getTeacherList,
+  getAnalysis,
 };

@@ -22,7 +22,7 @@ router.beforeEach((to, from, next) => {
   loactionActiv = ["/", "/login"];
 
   if (loactionRouter.length === 0) {
-      // 检测用户是否完成登录流程   登录-->选择学校-->获取学校权限-->进入拥有权限的页面
+    // 检测用户是否完成登录流程   登录-->选择学校-->获取学校权限-->进入拥有权限的页面
     localStorage.clear();
   }
 
