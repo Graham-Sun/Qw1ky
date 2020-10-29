@@ -1,7 +1,7 @@
 <template>
   <div id="analysisBuilt">
     <el-steps
-      :active="active"
+      :active="analysis.step"
       finish-status="success"
       simple
       style="margin-top: 20px"
@@ -11,20 +11,20 @@
       <el-step title="报表类型选择"></el-step>
       <el-step title="报表参数设置"></el-step>
     </el-steps>
-    <AnalysisType v-if="active === 0" />
-    <AnalysisImport v-if="active === 1" />
-    <AnalysisReport v-if="active === 2" />
-    <AnalysisSetting v-if="active === 3" />
+    <AnalysisType ref="AnalysisType" v-if="analysis.step === 0" />
+    <AnalysisImport ref="AnalysisImport" v-if="analysis.step === 1" />
+    <AnalysisReport ref="AnalysisReport" v-if="analysis.step === 2" />
+    <AnalysisSetting ref="AnalysisSetting" v-if="analysis.step === 3" />
     <div class="footer">
-      <el-button class="right" @click="next">
-        {{ active === 4 ? "完成" : "下一步" }}
+      <el-button class="right" @click="nextComponent">
+        {{ analysis.step === 4 ? "完成" : "下一步" }}
         <i class="el-icon-arrow-right el-icon--right"></i>
       </el-button>
       <el-button
-        @click="back"
+        @click="back(-1)"
         class="left"
         icon="el-icon-arrow-left"
-        v-show="active !== 0"
+        v-show="analysis.step !== 0"
         >上一步</el-button
       >
     </div>
@@ -40,11 +40,17 @@ import AnalysisImport from "./analysisImport";
 import AnalysisReport from "./analysisReport";
 // 报表参数设置
 import AnalysisSetting from "./analysisSetting";
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "AnalysisBuilt",
   data() {
     return {
-      active: 0,
+      component: {
+        0: "AnalysisType",
+        1: "AnalysisImport",
+        2: "AnalysisReport",
+        3: "AnalysisSetting",
+      },
     };
   },
   components: {
@@ -53,14 +59,20 @@ export default {
     AnalysisReport,
     AnalysisSetting,
   },
+  computed: {
+    ...mapState("analysis", {
+      analysis: "analysis",
+    }),
+  },
   methods: {
-    next() {
-      this.active += 1;
-    },
-    back() {
-      this.active -= 1;
+    ...mapMutations("analysis", {
+      back: "back",
+    }),
+    nextComponent() {
+      this.$refs[this.component[this.analysis.step]].begin();
     },
   },
+  mounted() {},
 };
 </script>
 

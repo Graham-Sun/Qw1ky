@@ -11,8 +11,13 @@
       </div>
     </el-header>
     <el-container>
-      <el-aside width="240px">
+      <el-aside :width="asideWidth">
+        <i
+          :class="isCollapse ? 'el-icon-d-arrow-right' : 'el-icon-d-arrow-left'"
+          @click="changeMenu"
+        />
         <el-menu
+          :collapse="isCollapse"
           :router="true"
           :default-active="active"
           :default-openeds="openeds"
@@ -68,6 +73,7 @@ export default {
   name: "Home",
   data() {
     return {
+      isCollapse: false,
       user: JSON.parse(localStorage.getItem("user")) || {},
       active: "",
       // 默认展开有children的节点
@@ -75,6 +81,7 @@ export default {
       // 有submenu，那必定会有children。
       routerMenu: JSON.parse(localStorage.getItem("router")) || [],
       dialogVisible: false,
+      asideWidth: "240px",
     };
   },
   components: {
@@ -95,6 +102,10 @@ export default {
     },
   },
   methods: {
+    changeMenu() {
+      this.isCollapse = !this.isCollapse;
+      this.asideWidth = this.isCollapse ? "50px" : "240px";
+    },
     logingOut() {
       localStorage.clear();
       this.$router.push({ name: "Login" });
@@ -206,8 +217,22 @@ export default {
   .el-aside {
     border-right: 1px solid #ccc;
     background: #fff;
+    position: relative;
     .el-menu-vertical-demo {
       border-right: 0px solid #fff;
+    }
+    .el-icon-d-arrow-right, .el-icon-d-arrow-left {
+      color: #fff;
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      background: #1dbd84;
+      z-index: 99;
+      right: 0px;
+      top: 50%;
+      margin-top: -10px;
     }
   }
 }

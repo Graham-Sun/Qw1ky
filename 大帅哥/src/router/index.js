@@ -30,19 +30,19 @@ const routes = [
           {
             id: "/analysisList",
             path: "analysisList",
-            name: "analysis",
+            name: "analysis_analysisList",
             component: () => import("@/view/analysisList/index.vue"),
           },
           {
             id: "/analysisComplete",
             path: "analysisComplete",
-            name: "analysis",
+            name: "analysis_analysisComplete",
             component: () => import("@/view/analysisComplete/index.vue"),
           },
           {
             id: "/analysisBuilt",
             path: "analysisBuilt",
-            name: "analysis",
+            name: "analysis_analysisBuilt",
             component: () => import("@/view/analysisBuilt/index.vue"),
           },
         ],

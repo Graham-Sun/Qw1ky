@@ -88,7 +88,10 @@
       <el-table-column prop="date" label="创建时间"> </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status === 0" style="cursor: pointer"
+          <el-tag
+            v-show="scope.row.status === 0"
+            style="cursor: pointer"
+            @click="toAnalysisBuilt(scope.row)"
             >参数设置</el-tag
           >
           <el-tag
@@ -117,7 +120,7 @@
 
 <script>
 import { getAnalysis } from "@/api/api";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "analysis",
   data() {
@@ -131,7 +134,7 @@ export default {
       },
       tableData: [],
       total: 0,
-      loading: false
+      loading: false,
     };
   },
   computed: {
@@ -144,6 +147,9 @@ export default {
     }),
   },
   methods: {
+    ...mapMutations("analysis", {
+      set_analysis: "set_analysis",
+    }),
     getAnalysis() {
       this.loading = true;
       getAnalysis(this.page).then((res) => {
@@ -154,8 +160,12 @@ export default {
       });
     },
     // 跳转到新建页面
-    toAnalysisBuilt() {
-      this.$router.push({ path: "/analysis/analysisBuilt" });
+    toAnalysisBuilt(row) {
+      let analysis = { id: row.id || "", step: Number(row.step) || 0 };
+      this.set_analysis(analysis);
+      this.$router.push({
+        name: "analysis_analysisBuilt",
+      });
     },
     // 点击table按钮
     handleClick(row, status) {

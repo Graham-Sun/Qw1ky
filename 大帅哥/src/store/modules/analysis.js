@@ -20,6 +20,8 @@ const state = {
     "11": "高中二年级",
     "12": "高中三年级",
   },
+  year: ["2020", "2019", "2018", "2017", "2016", "2015"],
+  analysis: JSON.parse(sessionStorage.getItem("analysis")),
 };
 
 // getters
@@ -29,7 +31,20 @@ const getters = {};
 const actions = {};
 
 // mutations
-const mutations = {};
+const mutations = {
+  [ANALYSIS.SET_ANALYSIS](state, obj) {
+    state.analysis = obj;
+    sessionStorage.setItem("analysis", JSON.stringify(obj));
+  },
+  [ANALYSIS.NEXT](state, obj) {
+    state.analysis.step += obj;
+    sessionStorage.setItem("analysis", JSON.stringify(state.analysis));
+  },
+  [ANALYSIS.BACK](state, obj) {
+    state.analysis.step += obj;
+    sessionStorage.setItem("analysis", JSON.stringify(state.analysis));
+  },
+};
 
 export default {
   namespaced: true,

@@ -27,7 +27,7 @@ router.beforeEach((to, from, next) => {
   }
 
   loactionFn(loactionRouter);
-  if (loactionActiv.indexOf(to.name) >= 0) {
+  if (loactionActiv.indexOf(to.name.split('_')[0]) >= 0) {
     next();
   } else {
     router.go(-1);

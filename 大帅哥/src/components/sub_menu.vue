@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <span>
     <template v-for="(item, index) in router">
       <el-submenu :key="index" v-if="item.children" :index="item.name">
         <template slot="title">
           <i :class="item.icon"></i>
-          <span>{{ item.name }}</span>
+          <span slot="title">{{ item.name }}</span>
         </template>
         <SubMenu :router="item.children" />
       </el-submenu>
@@ -13,7 +13,7 @@
         {{ item.name }}
       </el-menu-item>
     </template>
-  </div>
+  </span>
 </template>
 
 <script>
