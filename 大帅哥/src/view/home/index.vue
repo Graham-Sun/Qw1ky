@@ -46,10 +46,7 @@
       </el-aside>
       <el-main>
         <!-- home：显示路由页面（当前页面下，也就是home的子项） -->
-
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
+        <router-view></router-view>
       </el-main>
     </el-container>
     <el-footer>
@@ -88,7 +85,7 @@ export default {
   watch: {
     //to:即将去哪个路由，from:从哪个路由过来
     $route(to) {
-      this.active = to.path;
+      this.active = `/${to.path.split("/")[1]}`;
       this.routerMenu = JSON.parse(localStorage.getItem("router"));
     },
     // 监听路由是否变化
@@ -115,7 +112,7 @@ export default {
     getActive(router) {
       // 如果进来是 '/' 说明需要重定向，不是'/'则不走我们的重定向代码
       if (this.$route.path !== "/") {
-        this.active = this.$route.path;
+        this.active = `/${this.$route.path.split("/")[1]}`;
         return;
       }
       // 根据children来决定谁是第一个，也就是重定向的目标

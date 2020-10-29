@@ -11,7 +11,7 @@ const loactionFn = (l) => {
     if (item.children) {
       loactionFn(item.children);
     } else {
-      loactionActiv.push(item.path);
+      loactionActiv.push(item.id);
     }
   });
 };
@@ -19,7 +19,7 @@ const loactionFn = (l) => {
 router.beforeEach((to, from, next) => {
   // 每次守卫，重置我们的路由记录，获取本地路由
   const loactionRouter = JSON.parse(localStorage.getItem("router")) || [];
-  loactionActiv = ["/", "/login"];
+  loactionActiv = ["Home", "Login", "404"];
 
   if (loactionRouter.length === 0) {
     // 检测用户是否完成登录流程   登录-->选择学校-->获取学校权限-->进入拥有权限的页面
@@ -27,7 +27,7 @@ router.beforeEach((to, from, next) => {
   }
 
   loactionFn(loactionRouter);
-  if (loactionActiv.indexOf(to.path) >= 0) {
+  if (loactionActiv.indexOf(to.name) >= 0) {
     next();
   } else {
     router.go(-1);

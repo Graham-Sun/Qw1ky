@@ -24,19 +24,26 @@ const routes = [
         id: "/analysis",
         path: "analysis",
         name: "analysis",
+        redirect: "/analysis/analysisList",
         component: () => import("@/view/analysis/index.vue"),
         children: [
           {
+            id: "/analysisList",
+            path: "analysisList",
+            name: "analysis",
+            component: () => import("@/view/analysisList/index.vue"),
+          },
+          {
             id: "/analysisComplete",
             path: "analysisComplete",
-            name: "analysisComplete",
+            name: "analysis",
             component: () => import("@/view/analysisComplete/index.vue"),
           },
           {
-            id: "/newBuilt",
-            path: "newBuilt",
-            name: "newBuilt",
-            component: () => import("@/view/newBuilt/index.vue"),
+            id: "/analysisBuilt",
+            path: "analysisBuilt",
+            name: "analysis",
+            component: () => import("@/view/analysisBuilt/index.vue"),
           },
         ],
       },
@@ -45,6 +52,7 @@ const routes = [
         // menu2 会被渲染在 Home 的 <router-view> 中
         id: "/menu2",
         path: "menu2",
+        name: "menu2",
         component: () => import("@/view/menu2/index.vue"),
       },
       {
