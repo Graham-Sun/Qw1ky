@@ -67,6 +67,7 @@
         getApplyManagement(this.page).then(res => {
           let { data } = res
           this.tableData = data.data.list
+          console.log(tableData)
           this.total = data.data.num
           this.loading = false
         })

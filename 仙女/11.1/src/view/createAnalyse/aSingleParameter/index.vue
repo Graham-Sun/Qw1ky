@@ -5,49 +5,19 @@
       <div class="grade">
         <div class="grade-left">
           <div>
-            语文:<el-input-number
-              size="mini"
-              v-model="num"
-              :min="1"
-              :max="120"
-              label=""
-            ></el-input-number>
+            语文:<el-input-number size="mini" v-model="num" :min="1" :max="120" label=""></el-input-number>
           </div>
           <div>
-            数学:<el-input-number
-              size="mini"
-              v-model="num"
-              :min="1"
-              :max="120"
-              label=""
-            ></el-input-number>
+            数学:<el-input-number size="mini" v-model="num" :min="1" :max="120" label=""></el-input-number>
           </div>
           <div>
-            英语:<el-input-number
-              size="mini"
-              v-model="num"
-              :min="1"
-              :max="120"
-              label=""
-            ></el-input-number>
+            英语:<el-input-number size="mini" v-model="num" :min="1" :max="120" label=""></el-input-number>
           </div>
           <div>
-            生物:<el-input-number
-              size="mini"
-              v-model="num"
-              :min="1"
-              :max="120"
-              label=""
-            ></el-input-number>
+            生物:<el-input-number size="mini" v-model="num" :min="1" :max="120" label=""></el-input-number>
           </div>
           <div>
-            历史:<el-input-number
-              size="mini"
-              v-model="num"
-              :min="1"
-              :max="120"
-              label=""
-            ></el-input-number>
+            历史:<el-input-number size="mini" v-model="num" :min="1" :max="120" label=""></el-input-number>
           </div>
         </div>
         <span>总分满分：440</span>
@@ -79,86 +49,96 @@
 </template>
 
 <script>
-export default {
-  name: "aSingleParameter",
-  data() {
-    return {
-      num: 120,
-      checked: true,
-    };
-  },
-  methods: {
-    begin(active) {
-      return this.againSession(active);
+  export default {
+    name: "aSingleParameter",
+    data() {
+      return {
+        num: 120,
+        checked: true,
+      };
     },
-    backStep(active) {
-      return (active -= 1);
+    methods: {
+      begin(active) {
+        return this.againSession(active);
+      },
+      backStep(active) {
+        return (active -= 1);
+      },
+      againSession(active) {
+        return (active += 1);
+      },
     },
-    againSession(active) {
-      return (active += 1);
-    },
-  },
-};
+  };
 </script>
 
 <style lang="scss">
-#aSingleParameter {
-  width: 97.5%;
-  min-height: 83%;
-  background: #fff;
-  padding: 1px 20px;
-  .full_mark {
-    width: 100%;
-    height: 100px;
-    .grade {
-      margin-left: 30px;
-      display: flex;
-      justify-content: space-between;
-      .grade-left {
+  #aSingleParameter {
+    width: 97.5%;
+    min-height: 83%;
+    background: #fff;
+    padding: 1px 20px;
+
+    .full_mark {
+      width: 100%;
+      height: 100px;
+
+      .grade {
+        margin-left: 30px;
         display: flex;
-        div {
-          margin-right: 60px;
-          .el-input-number--mini {
-            width: 140px;
-            margin: 0 10px;
+        justify-content: space-between;
+
+        .grade-left {
+          display: flex;
+
+          div {
+            margin-right: 60px;
+
+            .el-input-number--mini {
+              width: 140px;
+              margin: 0 10px;
+            }
+          }
+        }
+
+        span {
+          color: #0fbc77;
+        }
+      }
+    }
+
+    .title {
+      height: 44px;
+      line-height: 44px;
+      text-indent: 30px;
+      color: #fff;
+      background: linear-gradient(270deg, #17c7bb 0%, #0fbc77 100%);
+    }
+
+    .analysis {
+      .analysis_valid {
+        .analysis_v {
+          width: 100%;
+          height: 60px;
+
+          .small_title {
+            width: 95%;
+            height: 30px;
+            line-height: 30px;
+            text-indent: 30px;
+            margin: 0px auto;
+            box-sizing: border-box;
+            background: #f0f9f6;
+            border: 1px solid rgb(235, 233, 233);
+          }
+
+          .analysis-v-child {
+            color: #000;
+            height: 44px;
+            line-height: 44px;
+            padding-left: 70px;
           }
         }
       }
-      span {
-        color: #0fbc77;
-      }
     }
   }
-  .title {
-    height: 44px;
-    line-height: 44px;
-    text-indent: 30px;
-    color: #fff;
-    background: linear-gradient(270deg, #17c7bb 0%, #0fbc77 100%);
-  }
-  .analysis {
-    .analysis_valid {
-      .analysis_v {
-        width: 100%;
-        height: 60px;
-        .small_title {
-          width: 95%;
-          height: 30px;
-          line-height: 30px;
-          text-indent: 30px;
-          margin: 0px auto;
-          box-sizing: border-box;
-          background: #f0f9f6;
-          border: 1px solid rgb(235, 233, 233);
-        }
-        .analysis-v-child {
-          color: #000;
-          height: 44px;
-          line-height:44px;
-          padding-left: 70px;
-        }
-      }
-    }
-  }
-}
 </style>

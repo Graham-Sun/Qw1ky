@@ -8,7 +8,6 @@ Vue.use(VueRouter);
 // 1. 定义 (路由) 组件。
 // 可以从其他文件 import 进来
 
-
 // 2. 定义路由
 // 每个路由应该映射一个组件。 其中"component" 可以是
 // 通过 Vue.extend() 创建的组件构造器，
@@ -16,34 +15,51 @@ Vue.use(VueRouter);
 // 我们晚点再讨论嵌套路由。
 // name跳转的时候用
 const routes = [{
+    id: "/",
     path: '/',
     name: "Home",
     component: () => import("@/Page/home/index.vue"),
-    // // 重定向
-    redirect: "/ASingleAnalysis",
     children: [{
         // 当 /ASingleAnalysis 匹配成功，
         // ASingleAnalysis 会被渲染在 Home 的 <router-view> 中
+        id: "/ASingleAnalysis",
         path: "ASingleAnalysis",
         name: "ASingleAnalysis",
-        component: () => import("@/Page/ASingleAnalysis/tab/analysis.vue"),
-        // redirect: {name: 'singleExcelID'},
-        // children: [{
-        //   path: "singleExcelID",
-        //   name: "singleExcelID",
-        //   component: () => import("@/Page/ASingleAnalysis/tab/analysis.vue"),
-        // }]
+        // 重定向
+        redirect: "/ASingleAnalysis/analysisList",
+        component: () => import("@/Page/ASingleAnalysis/index.vue"),
+        children: [{
+            id: "/analysisList",
+            path: "analysisList",
+            name: "ASingleAnalysis_analysisList",
+            component: () => import("@/Page/analysisList/index.vue"),
+          },
+          {
+            id: "/singleExcel",
+            path: "singleExcel",
+            name: "ASingleAnalysis_singleExcel",
+            component: () => import("@/Page/singleExcel/index.vue"),
+          },
+          {
+            id: "/analysisComplete",
+            path: "analysisComplete",
+            name: "ASingleAnalysis_analysisComplete",
+            component: () => import("@/Page/analysisComplete/index.vue"),
+          }
+        ]
       },
       {
         // 当 /teacherManagement 匹配成功，
         // teacherManagement 会被渲染在 Home 的 <router-view> 中
         path: "teacherManagement",
+        name: "TeacherManagement",
         component: () => import("@/Page/teacherManagement/index.vue"),
       },
       {
         // 当 /applicationAdmin 匹配成功，
         // applicationAdmin 会被渲染在 Home 的 <router-view> 中
         path: "applicationAdmin",
+        name: "ApplicationAdmin",
         component: () => import("@/Page/applicationAdmin/index.vue"),
       }
     ],

@@ -10,7 +10,7 @@
       </el-submenu>
       <el-menu-item v-else :index="item.path" :key="index">{{item.name}}</el-menu-item>
     </template>
-  </div>
+  </div>  
 </template>
 <script>
   export default {

@@ -1,6 +1,6 @@
 import router from "./router";
 
-let loactionActive = ['/', '/login'];
+let loactionActive = ['Home', 'Login', "404"];
 
 //要数据里的所有路径
 const loactionFn = (r) => {
@@ -8,7 +8,7 @@ const loactionFn = (r) => {
     if (ele.children) {
       loactionFn(ele.children)
     } else {
-      loactionActive.push(ele.path)
+      loactionActive.push(ele.id)
     }
   });
 }
@@ -20,14 +20,14 @@ const loactionFn = (r) => {
 
 router.beforeEach((to, from, next) => {
   const loactionRouter = JSON.parse(localStorage.getItem("router")) || [];
-  loactionActive = ['/', '/login'];
+  loactionActive = ['Home', 'Login', "404"];
 
   if (loactionRouter.length === 0) {
     // 检测用户是否完成登录流程   登录-->选择学校-->获取学校权限-->进入拥有权限的页面
     localStorage.clear();
   }
   loactionFn(loactionRouter);
-  if (loactionActive.indexOf(to.path) >= 0) {
+  if (loactionActive.indexOf(to.name.split('_')[0]) >= 0) {
     next()
   } else {
     router.go(-1)

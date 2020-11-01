@@ -14,10 +14,12 @@
       </div>
     </el-header>
     <el-container>
-      <el-aside width="240px">
-        <el-menu :router="true" :default-active="active" :default-openeds="openeds" class="el-menu-vertical-demo">
+      <el-aside :width="isCollapse ? '50px' : '240px'">
+        <el-menu :router="true" :default-active="active" :default-openeds="openeds" class="el-menu-vertical-demo"
+          :collapse="isCollapse" collapse-transition>
           <SubMenu :router="router" />
         </el-menu>
+        <i :class="isCollapse ? 'el-icon-d-arrow-right' : 'el-icon-d-arrow-left'" @click="collapse"></i>
       </el-aside>
       <el-main>
         <!-- home：显示路由页面（当前页面下，也就是home的子项） -->
@@ -44,7 +46,8 @@
         openeds: [],
         router: JSON.parse(localStorage.getItem("router")),
         dialogVisible: false,
-        loading: "true"
+        loading: "true",
+        isCollapse: false
       };
     },
     components: {
@@ -55,7 +58,7 @@
     watch: {
       // to:即将去哪个路由，from:从哪个路由过来,next 将要到哪个路由去
       $route(to) {
-        this.active = to.path;
+        this.active = `/${to.path.split("/")[1]}`;
         this.router = JSON.parse(localStorage.getItem("router"))
       },
       router() {
@@ -83,7 +86,7 @@
       //手动重定向
       getActive(redirect, router) {
         if (redirect !== "/") {
-          this.active = this.$route.path;
+          this.active = `/${this.$route.path.split("/")[1]}`;
           return;
         }
         if (router.children) {
@@ -99,6 +102,13 @@
           })
         } else {
           this.active = router.path
+        }
+      },
+      //侧栏横向展开
+      collapse() {
+        this.isCollapse = !this.isCollapse;
+        if (this.isCollapse === false) {
+          this.getSubMenu(this.router)
         }
       }
     },
@@ -201,9 +211,28 @@
     .el-aside {
       border-right: 1px solid #ccc;
       background: #fff;
+      position: relative;
 
       .el-menu-vertical-demo {
         border-right: 0px solid #fff;
+      }
+
+      .el-menu-vertical-demo:not(.el-menu--collapse) {
+        width: 200px;
+        min-height: 400px;
+      }
+
+      .el-icon-d-arrow-right,
+      .el-icon-d-arrow-left {
+        width: 20px;
+        line-height: 20px;
+        background: #0fbc77;
+        text-align: center;
+        position: absolute;
+        top: calc(50% - 10px);
+        right: 0;
+        color: #fff;
+        cursor: pointer;
       }
     }
   }
