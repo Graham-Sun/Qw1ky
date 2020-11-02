@@ -235,5 +235,9 @@ export default {
       margin-top: -10px;
     }
   }
+
+  .el-main{
+    background: #f5f4f4;
+  }
 }
 </style>

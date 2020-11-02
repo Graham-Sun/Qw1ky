@@ -15,7 +15,7 @@
     <AnalysisImport ref="AnalysisImport" v-if="analysis.step === 1" />
     <AnalysisReport ref="AnalysisReport" v-if="analysis.step === 2" />
     <AnalysisSetting ref="AnalysisSetting" v-if="analysis.step === 3" />
-    <div class="footer">
+    <div class="footer" :style="{ bottom: `${bottom}px` }">
       <el-button class="right" @click="nextComponent">
         {{ analysis.step === 4 ? "完成" : "下一步" }}
         <i class="el-icon-arrow-right el-icon--right"></i>
@@ -51,6 +51,7 @@ export default {
         2: "AnalysisReport",
         3: "AnalysisSetting",
       },
+      bottom: 43,
     };
   },
   components: {
@@ -59,6 +60,7 @@ export default {
     AnalysisReport,
     AnalysisSetting,
   },
+  watch: {},
   computed: {
     ...mapState("analysis", {
       analysis: "analysis",
@@ -71,8 +73,26 @@ export default {
     nextComponent() {
       this.$refs[this.component[this.analysis.step]].begin();
     },
+    watchSchool() {
+      //变量scrollTop是滚动条滚动时，距离顶部的距离
+      var scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      //变量windowHeight是可视区的高度
+      var windowHeight =
+        document.documentElement.clientHeight || document.body.clientHeight;
+      //变量scrollHeight是滚动条的总高度
+      var scrollHeight =
+        document.documentElement.scrollHeight || document.body.scrollHeight;
+      //滚动条到底部的条件
+      this.bottom = scrollTop + windowHeight == scrollHeight ? 43 : 0;
+    },
   },
-  mounted() {},
+  mounted() {
+    this.watchSchool();
+    window.onscroll = () => {
+      this.watchSchool();
+    };
+  },
 };
 </script>
 

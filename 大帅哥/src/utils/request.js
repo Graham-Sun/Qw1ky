@@ -6,6 +6,7 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const instance = axios.create({
   // 根地址
+  // baseURL: "https://www.easy-mock.com/mock/5f9f619b0bf9ee0300940b1c/api",
   baseURL:
     "https://www.fastmock.site/mock/42f5f901e1f9d0d347690940e0ed2513/api",
   timeout: 15000,
