@@ -24,6 +24,7 @@
           </div>
         </div>
       </div>
+
       <div
         v-show="
           setting.scoreValiditySettings.flag ||
@@ -59,15 +60,16 @@
           </el-checkbox-group>
         </div>
       </div>
+
       <div
         v-show="
-          setting.firstClassSettings.flag ||
+          setting.academicQualitySetting.flag ||
+            setting.firstClassSettings.flag ||
             setting.levelSettings.flag ||
-            setting.subjectTotalScoreSetting.flag ||
             setting.limitedNumberOfPeople.flag ||
-            setting.subjectTotalScoreSetting.flag ||
-            setting.subjectTotalScoreSetting.flag ||
-            setting.academicQualitySetting.falg
+            setting.roundingNumberSetting.flag ||
+            setting.subjectScoreInterval.flag ||
+            setting.subjectTotalScoreSetting.flag
         "
         class="advancedSetting"
       >
@@ -84,11 +86,10 @@
             <div>
               <span class="span">学生成绩人数等级：</span>
               <el-select
-                class="select"
                 size="small"
                 v-model="setting.firstClassSettings.defaultOption"
-                placeholder="请选择"
                 @change="changeFirstClassSettings"
+                placeholder="请选择"
               >
                 <el-option
                   v-for="item in setting.firstClassSettings.options"
@@ -108,7 +109,7 @@
                   v-model="item.value"
                   controls-position="right"
                   :min="0"
-                  :max="100 - firstClassTotalScore + item.value"
+                  :max="100 - firstClassNum + item.value"
                   size="small"
                 ></el-input-number>
               </div>
@@ -156,6 +157,7 @@ export default {
   props: {},
   data() {
     return {
+      num: 1,
       show: '<span>收起<i class="el-icon-arrow-up"/></span>',
       setting: {
         subjectFullScoreSettings: {},
@@ -168,31 +170,30 @@ export default {
         caliberOfMissingTestStatistics: {
           value: [],
         },
-        firstClassSettings: {
-          options: [],
-        },
+        firstClassSettings: {},
+        academicQualitySetting: {},
         levelSettings: {},
         limitedNumberOfPeople: {},
         roundingNumberSetting: {},
         subjectScoreInterval: {},
         subjectTotalScoreSetting: {},
-        academicQualitySetting: {},
       },
     };
   },
   computed: {
+    // 各科目满分设--计算总分
     totalScore() {
-      let totalScore = 0;
-      let value = this.setting.subjectFullScoreSettings.value;
-      value
-        ? (totalScore = value
-            .map((item) => item.value)
-            .reduce((x, y) => x + y, 0))
-        : (totalScore = 0);
-      return totalScore;
+      let { subjectFullScoreSettings } = this.setting;
+      let num = 0;
+      if (subjectFullScoreSettings.value) {
+        num = subjectFullScoreSettings.value
+          .map((item) => item.value)
+          .reduce((x, y) => x + y, 0);
+      }
+      return num;
     },
-    // 第等分数设置
-    firstClassTotalScore() {
+    // 设置最大值范围
+    firstClassNum() {
       return this.setting.firstClassSettings.value
         .map((item) => item.value)
         .reduce((x, y) => x + y, 0);
@@ -203,60 +204,59 @@ export default {
       next: "next",
     }),
     begin() {
-      this.submit();
+      this.ale();
     },
-    // 展开收起
+    ale() {
+      this.next(1);
+      console.log("报表参数设置");
+    },
+    // 分析报表高级设置--展开收起
     changeShow() {
       this.show =
-        this.show === '<span>收起<i class="el-icon-arrow-up"/></span>'
-          ? '<span>展开<i class="el-icon-arrow-down"/></span>'
-          : '<span>收起<i class="el-icon-arrow-up"/></span>';
+        this.show === '<span>展开<i class="el-icon-arrow-down"/></span>'
+          ? '<span>收起<i class="el-icon-arrow-up"/></span>'
+          : '<span>展开<i class="el-icon-arrow-down"/></span>';
     },
-    // 修改第等设置
+    //  学生成绩人数等级--改变第等设置
     changeFirstClassSettings(e) {
       let { firstClassSettings } = this.setting;
       let index = firstClassSettings.options.findIndex(
         (item) => item.name === e
       );
-      let value = firstClassSettings.options[index].value.split(",");
-      let newValue = [];
-      value.map((v) => {
-        newValue.push({
-          name: v,
+      let arr = firstClassSettings.options[index].value.split(",");
+      let newArr = [];
+      // 根据第等，创造出符合渲染的数据
+      arr.map((item) => {
+        newArr.push({
+          name: item,
           value: 0,
         });
       });
-      firstClassSettings.value = newValue;
+      // 使用新数据
+      firstClassSettings.value = newArr;
     },
-    // 提交数据
-    submit() {
-      if (this.firstClassTotalScore !== 100) {
-        this.$message.error("第等设置总和必须是100%");
-      }
-      if (this.firstClassTotalScore === 100) {
-        this.$router.push({ name: "analysis_analysisComplete" });
-      }
-    },
+    // 获取设置页面的参数
     getSetting() {
       getSetting().then((res) => {
         this.setting = res;
         let {
           scoreValiditySettings,
-          caliberOfMissingTestStatistics,
           caliberOf0PointsStatistics,
+          caliberOfMissingTestStatistics,
         } = this.setting;
         scoreValiditySettings.value = scoreValiditySettings.value.split(",");
-        caliberOfMissingTestStatistics.value = caliberOfMissingTestStatistics.value.split(
-          ","
-        );
         caliberOf0PointsStatistics.value = caliberOf0PointsStatistics.value.split(
           ","
         );
-        console.log(this.setting);
+        caliberOfMissingTestStatistics.value = caliberOfMissingTestStatistics.value.split(
+          ","
+        );
+        console.log(this.setting.firstClassSettings);
       });
     },
   },
   mounted() {
+    //
     this.getSetting();
   },
 };

@@ -1,11 +1,6 @@
 <template>
   <div id="analysisBuilt">
-    <el-steps
-      :active="analysis.step"
-      finish-status="success"
-      simple
-      style="margin-top: 20px"
-    >
+    <el-steps :active="analysis.step" finish-status="success" simple>
       <el-step title="分析类型确定"></el-step>
       <el-step title="分数成绩导入"></el-step>
       <el-step title="报表类型选择"></el-step>
@@ -17,7 +12,7 @@
     <AnalysisSetting ref="AnalysisSetting" v-if="analysis.step === 3" />
     <div class="footer" :style="{ bottom: `${bottom}px` }">
       <el-button class="right" @click="nextComponent">
-        {{ analysis.step === 4 ? "完成" : "下一步" }}
+        {{ analysis.step === 3 ? "完成" : "下一步" }}
         <i class="el-icon-arrow-right el-icon--right"></i>
       </el-button>
       <el-button
@@ -73,6 +68,7 @@ export default {
     nextComponent() {
       this.$refs[this.component[this.analysis.step]].begin();
     },
+    // 监听滚动条是否到达底部
     watchSchool() {
       //变量scrollTop是滚动条滚动时，距离顶部的距离
       var scrollTop =

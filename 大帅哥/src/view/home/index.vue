@@ -94,6 +94,7 @@ export default {
     $route(to) {
       this.active = `/${to.path.split("/")[1]}`;
       this.routerMenu = JSON.parse(localStorage.getItem("router"));
+      to.name === 'analysis_analysisComplete' ? this.changeMenu() : ''
     },
     // 监听路由是否变化
     routerMenu() {

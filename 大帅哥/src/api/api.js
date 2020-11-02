@@ -21,7 +21,7 @@ const getTeacherList = (data) => get("/teacherList", data);
 // 获取单词分析
 const getAnalysis = (data) => get("/analysis", data);
 
-// 获取单词分析
+// 单词分析设置页面（步骤四）
 const getSetting = (data) => get("/setting", data);
 
 export {
