@@ -80,7 +80,10 @@ export default {
       var scrollHeight =
         document.documentElement.scrollHeight || document.body.scrollHeight;
       //滚动条到底部的条件
-      this.bottom = scrollTop + windowHeight == scrollHeight ? 43 : 0;
+      this.bottom =
+        43 > scrollHeight - (scrollTop + windowHeight)
+          ? 43 - (scrollHeight - (scrollTop + windowHeight))
+          : 0;
     },
   },
   mounted() {

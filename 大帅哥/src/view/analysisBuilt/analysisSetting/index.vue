@@ -1,5 +1,5 @@
 <template>
-  <div id="setting">
+  <div id="setting" v-loading="loading">
     <div class="head">宝华实验学校2019年上学期七年级期末考试</div>
     <div class="content">
       <div v-show="setting.subjectFullScoreSettings.flag" class="subjectNum">
@@ -15,7 +15,7 @@
           >
             {{ item.name }}：
             <el-input-number
-              size="small"
+              size="mini"
               :min="0"
               :max="120"
               v-model="item.value"
@@ -85,7 +85,7 @@
               <span class="span">学生成绩人数等级：</span>
               <el-select
                 class="select"
-                size="small"
+                size="mini"
                 v-model="setting.firstClassSettings.defaultOption"
                 placeholder="请选择"
                 @change="changeFirstClassSettings"
@@ -109,7 +109,7 @@
                   controls-position="right"
                   :min="0"
                   :max="100 - firstClassTotalScore + item.value"
-                  size="small"
+                  size="mini"
                 ></el-input-number>
               </div>
             </div>
@@ -141,6 +141,95 @@
               </el-radio-group>
             </div>
           </div>
+          <div class="levelSettings" v-show="setting.levelSettings.flag">
+            <p>{{ setting.levelSettings.name }}</p>
+            <div>
+              <span class="span">学生成绩分数等级：</span>
+              <el-select
+                class="select"
+                size="mini"
+                v-model="setting.levelSettings.defaultOption"
+                placeholder="请选择"
+                @change="changeLevelSettings"
+              >
+                <el-option
+                  v-for="item in setting.levelSettings.options"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.name"
+                >
+                </el-option>
+              </el-select>
+              <div
+                class="value"
+                v-for="(item, index) in setting.levelSettings.value"
+                :key="index"
+              >
+                <span class="text" v-if="index === 0">
+                  0 ≤ {{ item.name }}
+                </span>
+                <span class="text" v-else>
+                  ﹤
+                  <el-input-number
+                    v-model="setting.levelSettings.arrValue[index]"
+                    controls-position="right"
+                    :min="0"
+                    :max="100"
+                    size="mini"
+                  ></el-input-number>
+                  ≤
+                  {{ item.name }}
+                </span>
+                <span
+                  class="text"
+                  v-if="index === setting.levelSettings.value.length - 1"
+                >
+                  ﹤100%
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="subjectScoreInterval"
+            v-show="setting.subjectScoreInterval.flag"
+          >
+            <p>{{ setting.subjectScoreInterval.name }}</p>
+            <div class="subjectScoreInterval_box">
+              <span class="span">总分分数间隔：</span>
+              <el-input-number
+                size="mini"
+                v-model="setting.subjectScoreInterval.defaultOption"
+                :min="5"
+                :max="10"
+                label="描述文字"
+                @change="
+                  (newNum, oldNum) => changeSubjectScoreInterval(newNum, oldNum)
+                "
+              ></el-input-number>
+              <div class="subjectScoreInterval_number">
+                <el-input-number
+                  size="mini"
+                  v-for="(item, index) in setting.subjectScoreInterval.value"
+                  :key="index"
+                  v-model="item.value"
+                  controls-position="right"
+                  :disabled="
+                    index === 0 ||
+                      index === setting.subjectScoreInterval.value.length - 1
+                  "
+                  :min="0"
+                  :max="
+                    setting.subjectScoreInterval.value[
+                      setting.subjectScoreInterval.value.length - 1
+                    ].value
+                  "
+                ></el-input-number>
+              </div>
+              <div class="tips">
+                *分数段间隔数量填写之后，系统会自动为您生成相应数量的间隔，并将总分自动拆分
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -156,6 +245,7 @@ export default {
   props: {},
   data() {
     return {
+      loading: true,
       show: '<span>收起<i class="el-icon-arrow-up"/></span>',
       setting: {
         subjectFullScoreSettings: {},
@@ -219,31 +309,98 @@ export default {
         (item) => item.name === e
       );
       let value = firstClassSettings.options[index].value.split(",");
-      let newValue = [];
+      let newArr = [];
       value.map((v) => {
-        newValue.push({
+        newArr.push({
           name: v,
           value: 0,
         });
       });
-      firstClassSettings.value = newValue;
+      firstClassSettings.value = newArr;
+    },
+    //  修改等级设置
+    changeLevelSettings(e) {
+      let { levelSettings } = this.setting;
+      let index = levelSettings.options.findIndex((item) => item.name === e);
+      let value = levelSettings.options[index].value.split(",");
+      let newArr = [];
+      let newValue = [];
+      let key = e.split("、");
+      value.map((item, index) => {
+        newArr.push({
+          name: key[index],
+          value: item,
+        });
+      });
+      levelSettings.value = newArr;
+      newArr.map((item) => {
+        newValue.push(item.value.split("-")[0]);
+      });
+      levelSettings.arrValue = newValue;
+    },
+    // 等级设置校验
+    validateLevelSettings() {
+      let { levelSettings } = this.setting;
+      let newArr = [];
+      // 修改数值
+      levelSettings.value.map((item, index) => {
+        newArr.push({
+          name: item.name,
+          value: `${levelSettings.arrValue[index]}-${levelSettings.arrValue[
+            index + 1
+          ] || 100}`,
+        });
+      });
+      levelSettings.value = newArr;
+      // 校验数值
+      return levelSettings.arrValue.every(
+        (item, index) => item < (levelSettings.arrValue[index + 1] || 100)
+      );
+    },
+    // 修改科目分数间隔
+    changeSubjectScoreInterval(newNum, oldNum) {
+      let { subjectScoreInterval } = this.setting;
+      let newArr = Array(Math.abs(newNum - oldNum)).fill({
+        name: 0,
+        value: 0,
+      });
+      newArr.map((item, index) => {
+        if (newNum - oldNum > 0) {
+          subjectScoreInterval.value.splice(
+            subjectScoreInterval.value.length - 1,
+            0,
+            item
+          );
+        } else {
+          subjectScoreInterval.value.splice(
+            subjectScoreInterval.value.length - 2,
+            1
+          );
+        }
+      });
     },
     // 提交数据
     submit() {
+      let levelSettings = this.validateLevelSettings();
       if (this.firstClassTotalScore !== 100) {
-        this.$message.error("第等设置总和必须是100%");
+        this.$message.error("【第等设置】学生成绩人数等级总和大于100%");
       }
-      if (this.firstClassTotalScore === 100) {
+      if (!levelSettings) {
+        this.$message.error("【等级设置】学生成绩人数等级区间错误");
+      }
+      if (this.firstClassTotalScore === 100 && levelSettings) {
         this.$router.push({ name: "analysis_analysisComplete" });
       }
     },
     getSetting() {
       getSetting().then((res) => {
+        this.loading = false;
         this.setting = res;
         let {
           scoreValiditySettings,
           caliberOfMissingTestStatistics,
           caliberOf0PointsStatistics,
+          levelSettings,
         } = this.setting;
         scoreValiditySettings.value = scoreValiditySettings.value.split(",");
         caliberOfMissingTestStatistics.value = caliberOfMissingTestStatistics.value.split(
@@ -252,7 +409,8 @@ export default {
         caliberOf0PointsStatistics.value = caliberOf0PointsStatistics.value.split(
           ","
         );
-        console.log(this.setting);
+        this.changeLevelSettings(levelSettings.defaultOption);
+        console.log(res);
       });
     },
   },
@@ -276,8 +434,17 @@ export default {
   .content {
     margin-top: 20px;
     min-height: 700px;
+    margin-bottom: 30px;
     background: #fff;
     padding: 13px 26px;
+    .el-input-number {
+      width: 98px;
+      padding-left: 0px !important;
+      .el-input__inner {
+        border-radius: 0px;
+      }
+    }
+
     .subjectNum,
     .basicSettings,
     .advancedSetting {
@@ -340,7 +507,9 @@ export default {
         }
       }
       .box {
-        .firstClassSettings {
+        .firstClassSettings,
+        .levelSettings,
+        .subjectScoreInterval {
           padding: 0 20px;
           p {
             height: 26px;
@@ -357,6 +526,8 @@ export default {
             font-size: 12px;
             margin-left: 28px;
           }
+        }
+        .firstClassSettings {
           .value {
             display: inline-block;
             margin-left: 30px;
@@ -392,6 +563,33 @@ export default {
               display: inline-block;
               margin-left: 26px;
             }
+          }
+        }
+        .levelSettings {
+          .value {
+            display: inline-block;
+          }
+          .select {
+            margin-bottom: 20px;
+            margin-right: 20px;
+          }
+          .text {
+            font-size: 14px;
+          }
+        }
+
+        .subjectScoreInterval {
+          .subjectScoreInterval_number {
+            display: inline-block;
+            margin-left: 20px;
+          }
+          .tips {
+            font-size: 12px;
+            font-family: MicrosoftYaHei;
+            color: #ef4747;
+            line-height: 16px;
+            margin-left: 28px;
+            margin-top: 10px;
           }
         }
       }
