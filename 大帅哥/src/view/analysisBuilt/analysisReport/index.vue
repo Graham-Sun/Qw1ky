@@ -4,12 +4,15 @@
 
 <script>
 import { mapMutations } from "vuex";
+import { getReport } from "@/api/api.js";
 export default {
   name: "AnalysisReport",
   // 接受父组件传来的参数
   props: {},
   data() {
-    return {};
+    return {
+      tableList: [],
+    };
   },
 
   methods: {
@@ -17,14 +20,20 @@ export default {
       next: "next",
     }),
     begin() {
-      this.ale();
+      this.submit();
     },
-    ale() {
+    submit() {
       this.next(1);
-      console.log("报表类型选择");
+    },
+    getReport() {
+      getReport().then((res) => {
+        this.tableList = res.list;
+      });
     },
   },
-  mounted() {},
+  mounted() {
+    this.getReport();
+  },
 };
 </script>
 

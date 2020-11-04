@@ -4,6 +4,8 @@
     width="461px"
     class="_dialog"
     :visible.sync="dialogVisible"
+    :close-on-click-modal="false"
+    :show-close="false"
   >
     <div class="_title">
       {{
@@ -37,25 +39,31 @@ export default {
   props: {
     dialogVisible: Boolean,
     userId: String,
+    schoolId: null,
   },
   data() {
     return {
-      schoolActive: "1",
+      schoolActive: "",
       schoolList: [],
     };
   },
   watch: {
-    userId: function(newQuestion) {
-      this.getSchoolList(newQuestion);
+    dialogVisible: function(newQuestion) {
+      if (newQuestion) {
+        this.getSchoolList(this.userId);
+      }
     },
   },
   methods: {
     // 获取学校列表
     getSchoolList(id) {
       getSchoolList({ id: id }).then((res) => {
-        let { data } = res;
-        this.schoolList = data;
-        this.schoolActive = data.length > 0 ? res.data[0].id : "";
+        this.schoolList = res.data;
+        if (this.schoolId) {
+          this.schoolActive = this.schoolId;
+        } else {
+          this.schoolActive = res.data.length > 0 ? res.data[0].id : "";
+        }
       });
     },
     // 确认登录
@@ -64,10 +72,23 @@ export default {
         userId: this.userId,
         id: this.schoolActive,
       }).then((res) => {
+        let { id, name } = this.schoolList.find(
+          (item) => item.id == this.schoolActive
+        );
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            ...JSON.parse(localStorage.getItem("user")),
+            ...{
+              schoolName: name,
+              schoolId: id,
+            },
+          })
+        );
         localStorage.setItem("router", JSON.stringify(res.data));
         // params会受到重定向（redirect）的影响， login---->Home--->menu1
         this.$router.push({ name: "Home" });
-        this.close()
+        this.close();
       });
     },
     // 关闭弹层

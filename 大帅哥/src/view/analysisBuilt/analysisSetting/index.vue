@@ -364,20 +364,19 @@ export default {
         name: 0,
         value: 0,
       });
-      newArr.map((item, index) => {
-        if (newNum - oldNum > 0) {
-          subjectScoreInterval.value.splice(
-            subjectScoreInterval.value.length - 1,
-            0,
-            item
-          );
-        } else {
-          subjectScoreInterval.value.splice(
-            subjectScoreInterval.value.length - 2,
-            1
-          );
-        }
-      });
+
+      if (newNum - oldNum > 0) {
+        subjectScoreInterval.value.splice(
+          subjectScoreInterval.value.length - 1,
+          0,
+          ...newArr
+        );
+      } else {
+        subjectScoreInterval.value.splice(
+          subjectScoreInterval.value.length - Math.abs(newNum - oldNum) - 1,
+          Math.abs(newNum - oldNum)
+        );
+      }
     },
     // 提交数据
     submit() {
@@ -410,7 +409,6 @@ export default {
           ","
         );
         this.changeLevelSettings(levelSettings.defaultOption);
-        console.log(res);
       });
     },
   },

@@ -7,7 +7,7 @@
       </div>
       <div class="name" @click="dialogVisible = true">
         <el-image class="headerImg" :src="user.url"></el-image>
-        <span> {{ user.nickName }}</span>
+        <span> {{ user.nickName }}【{{ user.schoolName }}】</span>
       </div>
     </el-header>
     <el-container>
@@ -61,6 +61,7 @@
     <Dialog
       :dialogVisible="dialogVisible"
       :userId="user.id"
+      :schoolId="user.schoolId"
       v-on:close="dialogVisible = false"
     />
   </el-container>
@@ -94,12 +95,15 @@ export default {
     $route(to) {
       this.active = `/${to.path.split("/")[1]}`;
       this.routerMenu = JSON.parse(localStorage.getItem("router"));
-      to.name === 'analysis_analysisComplete' ? this.changeMenu() : ''
+      to.name === "analysis_analysisComplete" ? this.changeMenu() : "";
     },
     // 监听路由是否变化
-    routerMenu() {
-      this.getSubMenu(this.routerMenu);
-      this.getActive(this.routerMenu[0]);
+    routerMenu(newObj, oldObj) {
+      // 判断路由是否有变化，产生变化才触发重定向
+      if (!(JSON.stringify(newObj) === JSON.stringify(oldObj))) {
+        this.getSubMenu(this.routerMenu);
+        this.getActive(this.routerMenu[0]);
+      }
     },
   },
   methods: {
@@ -222,7 +226,8 @@ export default {
     .el-menu-vertical-demo {
       border-right: 0px solid #fff;
     }
-    .el-icon-d-arrow-right, .el-icon-d-arrow-left {
+    .el-icon-d-arrow-right,
+    .el-icon-d-arrow-left {
       color: #fff;
       position: absolute;
       width: 20px;
@@ -237,7 +242,7 @@ export default {
     }
   }
 
-  .el-main{
+  .el-main {
     background: #f5f4f4;
   }
 }

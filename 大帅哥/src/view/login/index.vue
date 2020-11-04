@@ -142,7 +142,7 @@ export default {
     },
     login() {
       this.postPhoneLogin();
-    }
+    },
   },
   // html挂在后执行（只执行一次）适用于请求数据
   mounted: function() {

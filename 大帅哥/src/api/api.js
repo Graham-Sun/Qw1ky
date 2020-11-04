@@ -24,6 +24,9 @@ const getAnalysis = (data) => get("/analysis", data);
 // 单词分析设置页面（步骤四）
 const getSetting = (data) => get("/setting", data);
 
+// 报表类型选择（步骤三）
+const getReport = (data) => get("/report", data);
+
 export {
   postCode,
   postPhoneLogin,
@@ -32,5 +35,6 @@ export {
   getSchoolApply,
   getTeacherList,
   getAnalysis,
-  getSetting
+  getSetting,
+  getReport
 };
