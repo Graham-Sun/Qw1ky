@@ -1,12 +1,25 @@
 <template>
   <div id="error">
+    <LOVE />
     <div class="number">404</div>
     <div class="text"><span>Ooops...</span><br />page not found</div>
   </div>
 </template>
 
 <script>
-export default {};
+import LOVE from "@/components/loveBac";
+
+export default {
+  components: { LOVE },
+  methods: {
+    createLoves() {
+      this.$refs.LOVE.createLoves(event);
+    },
+    removeSmallHert() {
+      this.$refs.LOVE.removeSmallHert();
+    },
+  },
+};
 </script>
 
 <style lang="scss">
