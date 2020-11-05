@@ -68,8 +68,8 @@
 </template>
 
 <script>
-import SubMenu from "@/components/sub_menu.vue";
-import Dialog from "@/components/dialog.vue";
+import SubMenu from "@/components/subMenu";
+import Dialog from "@/components/dialog";
 export default {
   name: "Home",
   data() {
@@ -94,13 +94,21 @@ export default {
     //to:即将去哪个路由，from:从哪个路由过来
     $route(to) {
       this.active = `/${to.path.split("/")[1]}`;
-      this.routerMenu = JSON.parse(localStorage.getItem("router"));
+      this.routerMenu = JSON.parse(localStorage.getItem("router")); // 1、后台修改权限后重新登录（刷新），2、切换学校
+      this.user = JSON.parse(localStorage.getItem("user"));
       to.name === "analysis_analysisComplete" ? this.changeMenu() : "";
     },
-    // 监听路由是否变化
+    // 监听路由是否变化（学校ID不变、后台修改用户权限）
     routerMenu(newObj, oldObj) {
       // 判断路由是否有变化，产生变化才触发重定向
       if (!(JSON.stringify(newObj) === JSON.stringify(oldObj))) {
+        this.getSubMenu(this.routerMenu);
+        this.getActive(this.routerMenu[0]);
+      }
+    },
+    // 监听用户信息是否发生更改（学校ID改变）
+    user(newObj, oldObj) {
+      if (newObj.schoolId !== oldObj.schoolId) {
         this.getSubMenu(this.routerMenu);
         this.getActive(this.routerMenu[0]);
       }

@@ -1,5 +1,24 @@
 <template>
   <div id="login">
+    <vue-particles
+      color="#fff"
+      :particleOpacity="0.7"
+      :particlesNumber="70"
+      shapeType="circle"
+      :particleSize="4"
+      linesColor="#fff"
+      :linesWidth="1"
+      :lineLinked="true"
+      :lineOpacity="0.4"
+      :linesDistance="150"
+      :moveSpeed="2"
+      :hoverEffect="true"
+      hoverMode="repulse"
+      :clickEffect="true"
+      clickMode="remove"
+      class="particles"
+    >
+    </vue-particles>
     <div class="content">
       <div class="left">
         <img :src="img.loginleft" />
@@ -58,7 +77,7 @@ import { postCode, postPhoneLogin } from "@/api/api";
 import { _random } from "@/utils/utils";
 import loginleft from "@/assets/img/login/loginleft.png";
 import mobilelogo from "@/assets/img/login/mobilelogo.png";
-import Dialog from "@/components/dialog.vue";
+import Dialog from "@/components/dialog";
 
 export default {
   name: "Login",
@@ -161,6 +180,13 @@ export default {
   background: url("../../assets/img/login/bg.png") no-repeat;
   background-size: cover;
 
+  .particles {
+    z-index: 20;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+  }
+
   .content {
     background: #fff;
     width: calc(100% - 240px);
@@ -185,9 +211,14 @@ export default {
 
   .right {
     flex: 1;
+    position: relative;
     .template {
+      position: absolute;
+      z-index: 100;
       width: 500px;
-      margin: 0 auto;
+      left: 50%;
+      margin-left: -250px;
+
       img {
         width: 160px;
         height: 70px;

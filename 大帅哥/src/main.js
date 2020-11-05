@@ -5,7 +5,9 @@ import "element-ui/lib/theme-chalk/index.css";
 import router from "@/permission";
 import store from "./store";
 import bus from "@/utils/bus";
+import VueParticles from "vue-particles";
 
+Vue.use(VueParticles);
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
@@ -15,7 +17,7 @@ Vue.config.productionTip = false;
 
 // 全局注册组件
 Vue.component("EditTeacherDialog", () =>
-  import("./components/edit_teacher_dialog")
+  import("./components/editTeacherDialog")
 );
 
 Vue.prototype.$bus = bus;

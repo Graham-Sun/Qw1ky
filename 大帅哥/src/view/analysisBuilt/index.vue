@@ -66,7 +66,6 @@ export default {
       back: "back",
     }),
     nextComponent() {
-      console.log(123456)
       this.$refs[this.component[this.analysis.step]].begin();
     },
     // 监听滚动条是否到达底部

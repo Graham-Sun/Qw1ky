@@ -305,53 +305,45 @@ export default {
     // 修改第等设置
     changeFirstClassSettings(e) {
       let { firstClassSettings } = this.setting;
-      let index = firstClassSettings.options.findIndex(
-        (item) => item.name === e
-      );
-      let value = firstClassSettings.options[index].value.split(",");
-      let newArr = [];
-      value.map((v) => {
-        newArr.push({
-          name: v,
+      let value = firstClassSettings.options
+        .filter((item) => item.name === e)[0]
+        .value.split(",");
+      firstClassSettings.value = value.reduce((res, item) => {
+        res.push({
+          name: item,
           value: 0,
         });
-      });
-      firstClassSettings.value = newArr;
+        return res;
+      }, []);
     },
     //  修改等级设置
     changeLevelSettings(e) {
       let { levelSettings } = this.setting;
-      let index = levelSettings.options.findIndex((item) => item.name === e);
-      let value = levelSettings.options[index].value.split(",");
-      let newArr = [];
-      let newValue = [];
-      let key = e.split("、");
-      value.map((item, index) => {
-        newArr.push({
-          name: key[index],
+      let value = levelSettings.options
+        .filter((item) => item.name === e)[0]
+        .value.split(",");
+      levelSettings.arrValue = [];
+      levelSettings.value = value.reduce((res, item, index) => {
+        levelSettings.arrValue.push(item.split("-")[0]);
+        res.push({
+          name: e.split("、")[index],
           value: item,
         });
-      });
-      levelSettings.value = newArr;
-      newArr.map((item) => {
-        newValue.push(item.value.split("-")[0]);
-      });
-      levelSettings.arrValue = newValue;
+        return res;
+      }, []);
     },
     // 等级设置校验
     validateLevelSettings() {
       let { levelSettings } = this.setting;
-      let newArr = [];
       // 修改数值
-      levelSettings.value.map((item, index) => {
-        newArr.push({
+      levelSettings.value = levelSettings.value.reduce((res, item, index) => {
+        res.push({
           name: item.name,
           value: `${levelSettings.arrValue[index]}-${levelSettings.arrValue[
             index + 1
           ] || 100}`,
         });
-      });
-      levelSettings.value = newArr;
+      }, []);
       // 校验数值
       return levelSettings.arrValue.every(
         (item, index) => item < (levelSettings.arrValue[index + 1] || 100)
