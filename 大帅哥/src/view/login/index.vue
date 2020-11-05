@@ -78,7 +78,6 @@ import { _random } from "@/utils/utils";
 import loginleft from "@/assets/img/login/loginleft.png";
 import mobilelogo from "@/assets/img/login/mobilelogo.png";
 import Dialog from "@/components/dialog";
-
 export default {
   name: "Login",
   data() {
@@ -97,7 +96,7 @@ export default {
     };
   },
   components: {
-    Dialog: Dialog,
+    Dialog: Dialog
   },
   methods: {
     postCode() {

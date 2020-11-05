@@ -32,7 +32,7 @@ export default {
     },
   },
   mounted() {
-    this.$bus.$off();
+    this.$bus.$off("reportShowTable");
     this.$bus.$on("reportShowTable", this.changeDialogVisible);
   },
 };

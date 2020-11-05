@@ -89,6 +89,7 @@ export default {
     SubMenu: SubMenu,
     Dialog: Dialog,
   },
+
   // 切换同级children，监听$route的变化来修改菜单
   watch: {
     //to:即将去哪个路由，from:从哪个路由过来

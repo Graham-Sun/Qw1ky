@@ -44,7 +44,7 @@ export default {
     },
   },
   mounted() {
-    this.$bus.$off();
+    this.$bus.$off("changeDialogVisible");
     this.$bus.$on("changeDialogVisible", this.changeDialogVisible);
   },
 };

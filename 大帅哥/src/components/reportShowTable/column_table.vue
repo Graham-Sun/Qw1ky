@@ -19,9 +19,7 @@ export default {
     reprotColumn: Array,
   },
   methods: {},
-  mounted() {
-    console.log(this.reprotColumn)
-  },
+  mounted() {},
 };
 </script>
 

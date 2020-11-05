@@ -161,7 +161,7 @@ export default {
     },
     // 跳转到新建页面
     toAnalysisBuilt(row) {
-      let analysis = { id: row.id || "", step: Number(row.step) || 2 };
+      let analysis = { id: row.id || "", step: Number(row.step) || 0 };
       this.set_analysis(analysis);
       this.$router.push({
         name: "analysis_analysisBuilt",
