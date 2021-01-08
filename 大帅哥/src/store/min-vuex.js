@@ -8,11 +8,13 @@ const Store = function Store(options = {}) {
   });
   this._mutations = mutations;
 };
+
 Store.prototype.commit = function(type, payload) {
   if (this._mutations[type]) {
     this._mutations[type](this.state, payload);
   }
 };
+
 Object.defineProperties(Store.prototype, {
   state: {
     get: function() {
