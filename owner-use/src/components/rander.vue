@@ -14,12 +14,10 @@ export default {
   methods: {
     reverseMessage() {
       // this.message = this.message.split('').reverse().join('')
-      console.log(this.message.split(''));
-    }
-  }
+      console.log(this.message.split(""));
+    },
+  },
 };
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

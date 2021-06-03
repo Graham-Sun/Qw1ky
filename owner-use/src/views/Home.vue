@@ -11,7 +11,7 @@ import rander from "@/components/rander.vue";
 export default {
   name: "Home",
   components: {
-   'statement-rander': rander,
+    "statement-rander": rander,
   },
 };
 </script>
