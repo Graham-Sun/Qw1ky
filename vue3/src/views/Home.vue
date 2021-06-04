@@ -1,18 +1,30 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.jpeg" />
-    <statement-rander msg="Welcome to Your Vue.js App" />
+    <pre-rander msg="Welcome to Your Vue.js App" v-model:id="active" class="abc"/>
+    <div>{{ active }}</div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import rander from "@/components/rander.vue";
+import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
   name: "Home",
   components: {
-    "statement-rander": rander,
+    'pre-rander': HelloWorld,
   },
+  data() {
+    return {
+      active: 1,
+    };
+  },
+  methods: {},
+  watch: {},
 };
 </script>
+<style lang="scss">
+.abc {
+  color: blue;
+}
+</style>
