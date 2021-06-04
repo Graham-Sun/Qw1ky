@@ -3,13 +3,36 @@
     <h1>{{ msg }}</h1>
     <div :class="`${classNames}` + '_tab'">
       <ul :class="`${classNames}_ul`">
-        <li :class="classNames + '_list'" v-for="item in list" :key="item.id" @click="onChangeTabs(item)" >
-          <span :class="['label', { active: item.id , danger: item.id === id }]">
+        <li
+          :class="classNames + '_list'"
+          v-for="item in list"
+          :key="item.id"
+          @click="onChangeTabs(item)"
+        >
+          <span
+            :class="['label', { active, danger: item.value === modelValue }]"
+          >
             {{ item.label }}
           </span>
-          <span :class="[$attrs.class, { danger: item.id === id }]">{{ item.value }}</span>
+          <span
+            :class="[$attrs.class, { active: item.id === value }]"
+            @click="one, two"
+            >{{ item.value }}</span
+          >
         </li>
       </ul>
+      <div>{{ $attrs["data-id"] }}</div>
+      <input @keyup.space="up" v-model.lazy="inputContent" />
+      <div :class="`${classNames}_input`" v-if="published">
+        <input type="checkbox" id="jack" value="Jack" v-model="checkedNames" />
+        <label for="jack">Jack</label>
+        <input type="checkbox" id="john" value="John" v-model="checkedNames" />
+        <label for="john">John</label>
+        <input type="checkbox" id="mike" value="Mike" v-model="checkedNames" />
+        <label for="mike">Mike</label>
+        <span>Checked names: {{ checkedNames }}</span>
+      </div>
+      <div>{{ inputContent }}</div>
     </div>
   </div>
 </template>
@@ -17,12 +40,21 @@
 <script>
 export default {
   name: "rander",
+  inheritAttrs: false,
+  emits: ["change-tab"],
   props: {
     msg: String,
-    id: {
+    modelValue: {
+      type: [Number, String],
+    },
+    value: {
       type: [Number, String],
       default: 1,
     },
+    published: Boolean,
+  },
+  created() {
+    console.log(this.$attrs);
   },
   data() {
     return {
@@ -39,11 +71,24 @@ export default {
           value: "bigpander",
         },
       ],
+      checkedNames: [],
+      inputContent: "",
     };
   },
   methods: {
     onChangeTabs(item) {
-      this.$emit("update:id", item.id);
+      this.$emit("update:modelValue", item.value);
+      this.$emit("update:value", item.id);
+      // this.$attrs.onChangeTab(44)
+    },
+    one() {
+      console.log(1);
+    },
+    two() {
+      console.log(2);
+    },
+    up() {
+      alert(22);
     },
   },
 };
