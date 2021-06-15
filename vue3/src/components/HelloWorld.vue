@@ -38,7 +38,6 @@
 </template>
 
 <script>
-// import { Vue } from "vue";
 export default {
   name: "rander",
   inheritAttrs: false,
@@ -53,7 +52,6 @@ export default {
     },
   },
   // render() {
-  //   const { h } = Vue;
   //   return h(
   //     "h" + this.value, // tag name
   //     {}, // props/attributes

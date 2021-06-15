@@ -14,6 +14,7 @@
 </template>
 <script>
 import { myMixin } from "@/utils/mixins.js";
+import { getScroll0ffset } from "@/utils/JSjianrong.js";
 
 export default {
   inject: ["active"],
@@ -23,7 +24,7 @@ export default {
   },
   watch: {},
   mounted() {
-    console.log(this.getScroll0ffset());
+    console.log(getScroll0ffset());
   },
 };
 </script>
