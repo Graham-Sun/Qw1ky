@@ -22,7 +22,7 @@
         </li>
       </ul>
       <div>{{ $attrs["data-id"] }}</div>
-      <input @keyup.space="up" v-model.lazy="inputContent" />
+      <input @keyup.space="up" v-model.lazy="inputContent" v-focus />
       <div :class="`${classNames}_input`" v-if="published">
         <input type="checkbox" id="jack" value="Jack" v-model="checkedNames" />
         <label for="jack">Jack</label>
@@ -38,10 +38,28 @@
 </template>
 
 <script>
+// import { Vue } from "vue";
 export default {
   name: "rander",
   inheritAttrs: false,
   emits: ["change-tab"],
+  directives: {
+    focus: {
+      // 指令的定义
+      mounted(el, binding) {
+        console.log(el, binding);
+        el.focus();
+      },
+    },
+  },
+  // render() {
+  //   const { h } = Vue;
+  //   return h(
+  //     "h" + this.value, // tag name
+  //     {}, // props/attributes
+  //     this.$slots.default() // array of children
+  //   );
+  // },
   props: {
     msg: String,
     modelValue: {

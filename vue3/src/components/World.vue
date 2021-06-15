@@ -13,7 +13,17 @@
   </div>
 </template>
 <script>
+import { myMixin } from "@/utils/mixins.js";
+
 export default {
   inject: ["active"],
+  mixins: [myMixin],
+  data() {
+    return {};
+  },
+  watch: {},
+  mounted() {
+    console.log(this.getScroll0ffset());
+  },
 };
 </script>

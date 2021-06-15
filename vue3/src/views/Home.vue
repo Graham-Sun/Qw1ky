@@ -10,8 +10,11 @@
       @change-tab="change"
     />
     <div>{{ active2 }}</div>
-    <component v-bind:is="active">{{ active }}</component>
-    <Hello is="pander" />
+    <!-- <component v-bind:is="active">{{ active }}</component> -->
+    <button @click="showHello = !showHello">
+      {{ !showHello ? "点击" : "隐藏" }}展示动画
+    </button>
+    <Hello v-if="showHello" />
   </div>
 </template>
 
@@ -30,6 +33,7 @@ export default {
     return {
       active: "bigpander",
       active2: 2,
+      showHello: false,
     };
   },
   methods: {
