@@ -16,6 +16,7 @@ module.exports = {
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     // allow paren-less arrow functions
     "arrow-parens": 0,
+    "no-unused-vars": "off",
     // allow async-await
     "generator-star-spacing": 0,
     eqeqeq: 0, // 剔除必须使用全等
